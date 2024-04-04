@@ -1,41 +1,21 @@
 import type { FunctionComponent } from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useTurns } from '../../hooks/turns'
 
 type GameProps = {
 	players: Player[]
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Game: FunctionComponent<GameProps> = ({ players }) => {
-	const makePlayerIterator = (players: Player[]) => {
-		let nextIdx = 0
-		const increment = () => (nextIdx + 1 >= players.length ? 0 : nextIdx + 1)
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const copyArrayByValue = (arr: any[]) => JSON.parse(JSON.stringify(arr))
 
-		const iter = {
-			next: (): Player => {
-				const result = players[nextIdx]
+	const [playerList, setPlayerList] = useState<Player[]>(copyArrayByValue(players))
+	const { currentPlayer, nextTurn } = useTurns(playerList)
 
-				nextIdx = increment()
-				while (players[nextIdx].score <= 0) {
-					nextIdx = increment()
-				}
-
-				return result
-			},
-		}
-
-		return iter
-	}
-
-	const [playerList, setPlayerList] = useState<Player[]>(players)
-	const playerIterator = useRef(makePlayerIterator(playerList))
-
-	const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null)
 	const [currentSetter, setCurrentSetter] = useState<Player | null>(null)
 	const [winner, setWinner] = useState<Player | null>(null)
 	const [hasTrickBeenSet, setHasTrickBeenSet] = useState<boolean>(false)
-
-	useEffect(() => setCurrentPlayer(playerIterator.current.next()), [])
 
 	const convertScoreToLetters = (score: number): string => {
 		const letters = 'SKATE'
@@ -46,32 +26,30 @@ const Game: FunctionComponent<GameProps> = ({ players }) => {
 
 	const onTrickSet = () => {
 		setCurrentSetter(currentPlayer)
-		setCurrentPlayer(playerIterator.current.next())
+		nextTurn()
 		setHasTrickBeenSet(true)
 	}
 
 	const onTrickSetFailed = () => {
-		setCurrentPlayer(playerIterator.current.next())
+		nextTurn()
 	}
 
 	/* Copying */
 
 	const onTrickCopyFinished = () => {
-		const nextPlayer = playerIterator.current.next()
+		const nextPlayer = nextTurn().player
 
 		if (nextPlayer.name === currentSetter!.name) {
 			setCurrentSetter(null)
 			setHasTrickBeenSet(false)
 		}
-
-		setCurrentPlayer(nextPlayer)
 	}
 
 	const onTrickCopyFailed = () => {
 		const tempPlayerList = playerList
 
 		tempPlayerList.forEach(player => {
-			if (player.name === currentPlayer?.name) {
+			if (player.name === currentPlayer.name) {
 				player.score -= 1
 			}
 		})
