@@ -40,7 +40,7 @@ const Game: FunctionComponent<GameProps> = ({ players }) => {
 	const onTrickCopyFinished = () => {
 		const nextPlayer = nextTurn().player
 
-		if (nextPlayer.name === currentSetter!.name) {
+		if (nextPlayer.id === currentSetter!.id) {
 			setCurrentSetter(null)
 			setHasTrickBeenSet(false)
 		}
@@ -50,7 +50,7 @@ const Game: FunctionComponent<GameProps> = ({ players }) => {
 		const tempPlayerList = playerList
 
 		tempPlayerList.forEach(player => {
-			if (player.name === currentPlayer.name) {
+			if (player.id === currentPlayer.id) {
 				player.score -= 1
 			}
 		})
@@ -76,7 +76,7 @@ const Game: FunctionComponent<GameProps> = ({ players }) => {
 				{playerList.map(player => {
 					if (player.score > 0) {
 						return (
-							<ListItem key={player.name}>
+							<ListItem key={player.id}>
 								<Text>
 									{player.name} - {convertScoreToLetters(player.score)}
 								</Text>
@@ -84,7 +84,7 @@ const Game: FunctionComponent<GameProps> = ({ players }) => {
 						)
 					} else {
 						return (
-							<ListItem key={player.name}>
+							<ListItem key={player.id}>
 								<Text style={{ textDecoration: 'line-through' }}>
 									{player.name} - {convertScoreToLetters(player.score)}
 								</Text>

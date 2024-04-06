@@ -1,4 +1,14 @@
-import { Button, FormControl, HStack, Input, List, ListItem, Text } from '@chakra-ui/react'
+import {
+	Center,
+	FormControl,
+	HStack,
+	IconButton,
+	Input,
+	List,
+	ListItem,
+	Text,
+	VStack,
+} from '@chakra-ui/react'
 import { useState } from 'react'
 import type { Dispatch, FormEvent, FunctionComponent, SetStateAction } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -27,7 +37,7 @@ const PlayerSetup: FunctionComponent<PlayerSetupProps> = ({ players, setPlayers 
 			return
 		}
 
-		const lastId = players[players.length - 1].id
+		const lastId = players[players.length - 1]?.id || 0
 		const newPlayer = { id: lastId + 1, name: newPlayerName, score: 5 }
 
 		addPlayer(newPlayer)
@@ -35,31 +45,38 @@ const PlayerSetup: FunctionComponent<PlayerSetupProps> = ({ players, setPlayers 
 	}
 
 	return (
-		<form onSubmit={handleSubmit} autoComplete="off" style={{ width: '100%' }}>
-			<FormControl>
-				<HStack w="100%" px="30px">
-					<Input
-						type="text"
-						id="playerName"
-						name="playerName"
-						value={newPlayerName}
-						onChange={e => setNewPlayerName(e.target.value)}
-					/>
-					<Button type="submit" bg="none" color="white" w="40px">
-						<FontAwesomeIcon icon={faPlus} />
-					</Button>
-				</HStack>
-			</FormControl>
+		<VStack w="full">
+			<Center as="form" w="full" onSubmit={handleSubmit} autoComplete="off">
+				<FormControl>
+					<HStack w="100%" px="30px">
+						<Input
+							type="text"
+							id="playerName"
+							name="playerName"
+							value={newPlayerName}
+							onChange={e => setNewPlayerName(e.target.value)}
+						/>
+						<IconButton
+							type="submit"
+							bg="none"
+							color="white"
+							w="40px"
+							aria-label="Add"
+							icon={<FontAwesomeIcon icon={faPlus} />}
+						/>
+					</HStack>
+				</FormControl>
+			</Center>
 			{players.length > 0 && (
 				<List id="players" pt="4">
 					{players.map(player => (
-						<ListItem key={player.name}>
+						<ListItem key={player.id}>
 							<Text align="center">{player.name}</Text>
 						</ListItem>
 					))}
 				</List>
 			)}
-		</form>
+		</VStack>
 	)
 }
 
