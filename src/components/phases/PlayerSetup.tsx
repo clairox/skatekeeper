@@ -1,15 +1,24 @@
-import { Button, FormControl, HStack, Input } from '@chakra-ui/react'
+import { Button, FormControl, HStack, Input, List, ListItem, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import type { Dispatch, FormEvent, FunctionComponent, SetStateAction } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 type PlayerSetupProps = {
+	players: Player[]
 	setPlayers: Dispatch<SetStateAction<Player[]>>
 }
 
-const PlayerSetup: FunctionComponent<PlayerSetupProps> = ({ setPlayers }) => {
+const PlayerSetup: FunctionComponent<PlayerSetupProps> = ({ players, setPlayers }) => {
 	const [newPlayerName, setNewPlayerName] = useState('')
+
+	const addPlayer = (player: Player) => {
+		setPlayers(prev => [...prev, player])
+	}
+
+	const removePlayer = (id: number) => {
+		setPlayers(prev => prev.filter(player => player.id !== id))
+	}
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
@@ -18,8 +27,10 @@ const PlayerSetup: FunctionComponent<PlayerSetupProps> = ({ setPlayers }) => {
 			return
 		}
 
-		const newPlayer = { name: newPlayerName, score: 5 }
-		setPlayers(prev => prev.concat(newPlayer))
+		const lastId = players[players.length - 1].id
+		const newPlayer = { id: lastId + 1, name: newPlayerName, score: 5 }
+
+		addPlayer(newPlayer)
 		setNewPlayerName('')
 	}
 
@@ -39,6 +50,15 @@ const PlayerSetup: FunctionComponent<PlayerSetupProps> = ({ setPlayers }) => {
 					</Button>
 				</HStack>
 			</FormControl>
+			{players.length > 0 && (
+				<List id="players" pt="4">
+					{players.map(player => (
+						<ListItem key={player.name}>
+							<Text align="center">{player.name}</Text>
+						</ListItem>
+					))}
+				</List>
+			)}
 		</form>
 	)
 }
