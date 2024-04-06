@@ -68,13 +68,16 @@ const PlayerSetup: FunctionComponent<PlayerSetupProps> = ({ players, setPlayers 
 				</FormControl>
 			</Center>
 			{players.length > 0 && (
-				<List id="players" pt="4">
-					{players.map(player => (
-						<ListItem key={player.id}>
-							<Text align="center">{player.name}</Text>
-						</ListItem>
-					))}
-				</List>
+				<VStack>
+					<List id="players" pt="2">
+						{players.map(player => (
+							<ListItem key={player.id} onClick={() => removePlayer(player.id)}>
+								<Text align="center">{player.name}</Text>
+							</ListItem>
+						))}
+					</List>
+					<Text color="whiteAlpha.600">Click a name to remove it</Text>
+				</VStack>
 			)}
 		</VStack>
 	)
