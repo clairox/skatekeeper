@@ -4,11 +4,13 @@ import '@fontsource/oswald'
 export const theme = extendTheme({
 	styles: {
 		global: {
+			html: {},
 			body: {
-				fontSize: '120%',
-				fontWeight: 'normal',
+				px: '8',
 				bg: 'blackAlpha.900',
 				color: 'white',
+				fontSize: '1.2rem',
+				fontWeight: 'normal',
 				letterSpacing: 'wider',
 			},
 		},
@@ -17,13 +19,7 @@ export const theme = extendTheme({
 		heading: `'Oswald', sans-serif`,
 		body: `'Oswald', sans-serif`,
 	},
-	//TODO: text weight and sizing
 	components: {
-		Text: {
-			defaultProps: {
-				size: '2xl',
-			},
-		},
 		Input: {
 			baseStyle: {
 				field: {

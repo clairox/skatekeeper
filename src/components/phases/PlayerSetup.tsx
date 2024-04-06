@@ -48,7 +48,7 @@ const PlayerSetup: FunctionComponent<PlayerSetupProps> = ({ players, setPlayers 
 		<VStack w="full">
 			<Center as="form" w="full" onSubmit={handleSubmit} autoComplete="off">
 				<FormControl>
-					<HStack w="100%" px="30px">
+					<HStack w="100%">
 						<Input
 							type="text"
 							id="playerName"
@@ -68,10 +68,15 @@ const PlayerSetup: FunctionComponent<PlayerSetupProps> = ({ players, setPlayers 
 				</FormControl>
 			</Center>
 			{players.length > 0 && (
-				<VStack>
-					<List id="players" pt="2">
+				<VStack w="full">
+					<List id="players" w="full" pt="2">
 						{players.map(player => (
-							<ListItem key={player.id} onClick={() => removePlayer(player.id)}>
+							<ListItem
+								key={player.id}
+								cursor="default"
+								_hover={{ bg: 'pink.500' }}
+								onClick={() => removePlayer(player.id)}
+							>
 								<Text align="center">{player.name}</Text>
 							</ListItem>
 						))}
