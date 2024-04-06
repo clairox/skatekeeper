@@ -2,6 +2,7 @@ import { useState } from 'react'
 import PlayerSetup from './components/phases/PlayerSetup'
 import ChooseTurns from './components/phases/ChooseTurns'
 import Game from './components/phases/Game'
+import { Button, Center, Heading, List, ListItem, Text, VStack } from '@chakra-ui/react'
 
 function App() {
 	const [phase, setPhase] = useState<Phase>('playerSetup')
@@ -9,17 +10,25 @@ function App() {
 
 	if (phase === 'playerSetup') {
 		return (
-			<>
-				{players.length > 0 && (
-					<div id="players">
-						{players.map(player => (
-							<li key={player.name}>{player.name}</li>
-						))}
-					</div>
-				)}
+			<VStack>
+				<Heading>Add players:</Heading>
 				<PlayerSetup setPlayers={setPlayers} />
-				<button onClick={() => setPhase('chooseTurns')}>Done</button>
-			</>
+				{players.length > 0 && (
+					<List id="players" pt="4">
+						{players.map(player => (
+							<ListItem key={player.name}>
+								<Text align="center">{player.name}</Text>
+							</ListItem>
+						))}
+					</List>
+				)}
+
+				<Center>
+					<Button mt="4" onClick={() => setPhase('chooseTurns')} isDisabled={players.length < 2}>
+						Done
+					</Button>
+				</Center>
+			</VStack>
 		)
 	}
 

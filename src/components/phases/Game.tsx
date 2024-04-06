@@ -1,6 +1,7 @@
 import type { FunctionComponent } from 'react'
 import { useEffect, useState } from 'react'
 import { useTurns } from '../../hooks/turns'
+import { Button, ButtonGroup, Center, List, ListItem, Text, VStack } from '@chakra-ui/react'
 
 type GameProps = {
 	players: Player[]
@@ -8,9 +9,9 @@ type GameProps = {
 
 const Game: FunctionComponent<GameProps> = ({ players }) => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const copyArrayByValue = (arr: any[]) => JSON.parse(JSON.stringify(arr))
+	const cloneArray = (arr: any[]) => JSON.parse(JSON.stringify(arr))
 
-	const [playerList, setPlayerList] = useState<Player[]>(copyArrayByValue(players))
+	const [playerList, setPlayerList] = useState<Player[]>(cloneArray(players))
 	const { currentPlayer, nextTurn } = useTurns(playerList)
 
 	const [currentSetter, setCurrentSetter] = useState<Player | null>(null)
@@ -66,50 +67,54 @@ const Game: FunctionComponent<GameProps> = ({ players }) => {
 	}, [playerList])
 
 	if (winner !== null) {
-		return <div>{winner.name} wins!</div>
+		return <Center>{winner.name} wins!</Center>
 	}
 
 	return (
-		<>
-			<ul>
+		<VStack>
+			<List>
 				{playerList.map(player => {
 					if (player.score > 0) {
 						return (
-							<li key={player.name}>
-								<div>
+							<ListItem key={player.name}>
+								<Text>
 									{player.name} - {convertScoreToLetters(player.score)}
-								</div>
-							</li>
+								</Text>
+							</ListItem>
 						)
 					} else {
 						return (
-							<li key={player.name}>
-								<div style={{ textDecoration: 'line-through' }}>
+							<ListItem key={player.name}>
+								<Text style={{ textDecoration: 'line-through' }}>
 									{player.name} - {convertScoreToLetters(player.score)}
-								</div>
-							</li>
+								</Text>
+							</ListItem>
 						)
 					}
 				})}
-			</ul>
-			<div>
+			</List>
+			<VStack>
 				{hasTrickBeenSet ? (
 					<>
-						<div>
+						<Text>
 							{currentPlayer?.name} is copying {currentSetter!.name}'s trick
-						</div>
-						<button onClick={onTrickCopyFailed}>Failed</button>
-						<button onClick={onTrickCopyFinished}>Done</button>
+						</Text>
+						<ButtonGroup>
+							<Button onClick={onTrickCopyFailed}>Failed</Button>
+							<Button onClick={onTrickCopyFinished}>Done</Button>
+						</ButtonGroup>
 					</>
 				) : (
 					<>
-						<div>{currentPlayer?.name} is setting a trick</div>
-						<button onClick={onTrickSetFailed}>Failed</button>
-						<button onClick={onTrickSet}>Done</button>
+						<Text>{currentPlayer?.name} is setting a trick</Text>
+						<ButtonGroup>
+							<Button onClick={onTrickSetFailed}>Failed</Button>
+							<Button onClick={onTrickSet}>Done</Button>
+						</ButtonGroup>
 					</>
 				)}
-			</div>
-		</>
+			</VStack>
+		</VStack>
 	)
 }
 

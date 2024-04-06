@@ -1,3 +1,4 @@
+import { Center } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import type { Dispatch, SetStateAction, FunctionComponent } from 'react'
 
@@ -22,10 +23,10 @@ const ChooseTurns: FunctionComponent<ChooseTurnsProps> = ({ players, setPlayers,
 		setTimeout(() => {
 			shufflePlayers()
 			setPhase('game')
-		}, 10)
+		}, 1500)
 	}, [players, setPlayers, setPhase])
 
-	return <div>Roshambo!</div>
+	return <Center>Roshambo!</Center>
 }
 
 export default ChooseTurns
