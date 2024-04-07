@@ -1,7 +1,8 @@
 import type { FunctionComponent } from 'react'
 import { useEffect, useState } from 'react'
 import { useTurns } from '../../hooks/turns'
-import { Button, ButtonGroup, Center, List, ListItem, Text, VStack } from '@chakra-ui/react'
+import { Button, ButtonGroup, Center, HStack, List, ListItem, Text, VStack } from '@chakra-ui/react'
+import ScoreDisplay from '../ScoreDisplay'
 
 type GameProps = {
 	players: Player[]
@@ -17,11 +18,6 @@ const Game: FunctionComponent<GameProps> = ({ players }) => {
 	const [currentSetter, setCurrentSetter] = useState<Player | null>(null)
 	const [winner, setWinner] = useState<Player | null>(null)
 	const [hasTrickBeenSet, setHasTrickBeenSet] = useState<boolean>(false)
-
-	const convertScoreToLetters = (score: number): string => {
-		const letters = 'SKATE'
-		return letters.slice(0, 5 - score)
-	}
 
 	/* Setting */
 
@@ -77,17 +73,19 @@ const Game: FunctionComponent<GameProps> = ({ players }) => {
 					if (player.score > 0) {
 						return (
 							<ListItem key={player.id}>
-								<Text>
-									{player.name} - {convertScoreToLetters(player.score)}
-								</Text>
+								<HStack>
+									<Text>{player.name} - </Text>
+									<ScoreDisplay score={player.score} />
+								</HStack>
 							</ListItem>
 						)
 					} else {
 						return (
 							<ListItem key={player.id}>
-								<Text style={{ textDecoration: 'line-through' }}>
-									{player.name} - {convertScoreToLetters(player.score)}
-								</Text>
+								<HStack style={{ textDecoration: 'line-through' }}>
+									<Text>{player.name} - </Text>
+									<ScoreDisplay score={player.score} />
+								</HStack>
 							</ListItem>
 						)
 					}

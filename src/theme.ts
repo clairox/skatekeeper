@@ -1,5 +1,6 @@
 import { extendTheme } from '@chakra-ui/react'
 import '@fontsource/oswald'
+import '@fontsource/reenie-beanie'
 
 export const theme = extendTheme({
 	styles: {

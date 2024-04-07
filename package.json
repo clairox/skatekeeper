@@ -14,14 +14,15 @@
 		"@emotion/react": "^11.11.4",
 		"@emotion/styled": "^11.11.5",
 		"@fontsource/oswald": "^5.0.19",
+		"@fontsource/reenie-beanie": "^5.0.18",
+		"@fortawesome/fontawesome-svg-core": "^6.5.2",
+		"@fortawesome/free-solid-svg-icons": "^6.5.2",
+		"@fortawesome/react-fontawesome": "^0.2.0",
 		"framer-motion": "^11.0.24",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	},
 	"devDependencies": {
-		"@fortawesome/fontawesome-svg-core": "^6.5.2",
-		"@fortawesome/free-solid-svg-icons": "^6.5.2",
-		"@fortawesome/react-fontawesome": "^0.2.0",
 		"@types/react": "^18.2.66",
 		"@types/react-dom": "^18.2.22",
 		"@typescript-eslint/eslint-plugin": "^7.2.0",
@@ -31,6 +32,7 @@
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"eslint-plugin-react-refresh": "^0.4.6",
 		"typescript": "^5.2.2",
-		"vite": "^5.2.0"
+		"vite": "^5.2.0",
+		"vite-plugin-svgr": "^4.2.0"
 	}
 }
