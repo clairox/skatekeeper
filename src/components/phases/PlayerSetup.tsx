@@ -81,7 +81,7 @@ const PlayerSetup: FunctionComponent<PlayerSetupProps> = ({ players, setPlayers 
 							</ListItem>
 						))}
 					</List>
-					<Text color="whiteAlpha.600">Click a name to remove it</Text>
+					<Text color="whiteAlpha.500">Click a name to remove it</Text>
 				</VStack>
 			)}
 		</VStack>
