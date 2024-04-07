@@ -63,6 +63,7 @@ const PlayerSetup: FunctionComponent<PlayerSetupProps> = ({ players, setPlayers 
 							w="40px"
 							aria-label="Add"
 							icon={<FontAwesomeIcon icon={faPlus} />}
+							_hover={{ bg: 'inherit' }}
 						/>
 					</HStack>
 				</FormControl>
