@@ -1,0 +1,40 @@
+import { Button, Text, View } from 'react-native'
+import { useGame } from '../../context/GameContext'
+import { useEffect, useState } from 'react'
+
+type InitLettersStepProps = StepProps
+
+const InitLettersStep: React.FC<InitLettersStepProps> = ({ next }) => {
+    const { initLetters } = useGame()
+
+    const [done, setDone] = useState(false)
+
+    useEffect(() => {
+        if (done) {
+            next()
+        }
+    }, [done, next])
+
+    const _initLetters = (letters: string) => {
+        initLetters(letters)
+        setDone(true)
+    }
+
+    return (
+        <>
+            <Text>Choose a game mode</Text>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    gap: 50,
+                    justifyContent: 'center',
+                }}
+            >
+                <Button title="SKATE" onPress={() => _initLetters('SKATE')} />
+                <Button title="SK8" onPress={() => _initLetters('SK8')} />
+            </View>
+        </>
+    )
+}
+
+export default InitLettersStep
