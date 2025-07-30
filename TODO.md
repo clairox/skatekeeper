@@ -1,6 +1,6 @@
 # TODO.md
 
-### TODO
+### Todo
 
 - [ ] App settings
 - [ ] UI design
