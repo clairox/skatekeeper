@@ -2,12 +2,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { Text } from 'react-native'
 import { useGame } from '../../context/GameContext'
 
-const DELAY = 2500
+const DELAY = 250
 
 type ShufflePlayersStepProps = StepProps
 
 const ShufflePlayersStep: React.FC<ShufflePlayersStepProps> = ({ next }) => {
-    const { currentPlayers: players, setCurrentPlayers: setPlayers } = useGame()
+    const { players, activePlayers, setActivePlayers } = useGame()
 
     const [done, setDone] = useState(false)
 
@@ -24,8 +24,8 @@ const ShufflePlayersStep: React.FC<ShufflePlayersStepProps> = ({ next }) => {
             ]
         }
 
-        setPlayers(shuffledPlayers)
-    }, [players, setPlayers])
+        setActivePlayers(shuffledPlayers)
+    }, [players, setActivePlayers])
 
     useEffect(() => {
         if (!done) {
@@ -40,7 +40,7 @@ const ShufflePlayersStep: React.FC<ShufflePlayersStepProps> = ({ next }) => {
 
     return (
         <>
-            {players.map(player => (
+            {activePlayers.map(player => (
                 <Text key={player.name}>{player.name}</Text>
             ))}
             <Text>Ro-sham-bo!</Text>

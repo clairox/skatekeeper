@@ -5,7 +5,7 @@ import { useGame } from '../../context/GameContext'
 type AddPlayersStepProps = StepProps
 
 const AddPlayersStep: React.FC<AddPlayersStepProps> = ({ next }) => {
-    const { currentPlayers: players, addPlayer } = useGame()
+    const { players, addPlayer } = useGame()
     return (
         <>
             <Text>{"Who's playing?"}</Text>
