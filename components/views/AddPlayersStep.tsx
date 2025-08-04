@@ -1,11 +1,42 @@
 import { Button, Text, View } from 'react-native'
 import PlayerInput from '../PlayerInput'
-import { useGame } from '../../context/GameContext'
-
+import { useEffect, useState } from 'react'
+import { useGameActions } from '../../context/GameStoreContext'
 type AddPlayersStepProps = StepProps
 
 const AddPlayersStep: React.FC<AddPlayersStepProps> = ({ next }) => {
-    const { players, addPlayer } = useGame()
+    const { initPlayers } = useGameActions()
+
+    const [players, setPlayers] = useState<Player[]>([])
+    const [idCounter, setIdCounter] = useState(0)
+
+    const [done, setDone] = useState(false)
+
+    const addPlayer = (name: string) => {
+        const newPlayer: Player = {
+            id: idCounter,
+            name,
+            points: 0,
+            isEliminated: false,
+        }
+        setPlayers(prev => {
+            return [...prev, newPlayer]
+        })
+
+        console.log(`Player added: ${JSON.stringify(newPlayer, null, 4)}`)
+    }
+
+    useEffect(() => {
+        setIdCounter(prev => prev + 1)
+    }, [players.length])
+
+    useEffect(() => {
+        if (done) {
+            initPlayers(players)
+            next()
+        }
+    }, [done, next, players, initPlayers])
+
     return (
         <>
             <Text>{"Who's playing?"}</Text>
@@ -27,7 +58,11 @@ const AddPlayersStep: React.FC<AddPlayersStepProps> = ({ next }) => {
                     onPlayerAdded={addPlayer}
                 />
             </View>
-            <Button title="Done" disabled={players.length < 2} onPress={next} />
+            <Button
+                title="Done"
+                disabled={players.length < 2}
+                onPress={() => setDone(true)}
+            />
         </>
     )
 }

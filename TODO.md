@@ -2,12 +2,14 @@
 
 ### Todo
 
-- [ ] Game history
 - [ ] App settings
 - [ ] UI design
+- [ ] Redos
 
 ### In Progress
 
-- [ ] Migrate game state management to Zustand
+- [ ] Game history
 
 ### Done
+
+- [x] Migrate game state management to Zustand

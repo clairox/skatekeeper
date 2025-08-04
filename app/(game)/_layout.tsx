@@ -1,14 +1,14 @@
-import { GameProvider } from '../../context/GameContext'
 import MultiPlatformSafeAreaView from '../../components/MultiPlatformSafeAreaView'
 import { Slot } from 'expo-router'
+import { GameStoreProvider } from '../../context/GameStoreContext'
 
 const GameLayout = () => {
     return (
-        <GameProvider>
+        <GameStoreProvider>
             <MultiPlatformSafeAreaView>
                 <Slot />
             </MultiPlatformSafeAreaView>
-        </GameProvider>
+        </GameStoreProvider>
     )
 }
 

@@ -1,11 +1,11 @@
 import { Button, Text, View } from 'react-native'
-import { useGame } from '../../context/GameContext'
 import { useEffect, useState } from 'react'
+import { useGameActions } from '../../context/GameStoreContext'
 
 type InitLettersStepProps = StepProps
 
 const InitLettersStep: React.FC<InitLettersStepProps> = ({ next }) => {
-    const { initLetters } = useGame()
+    const { initLetters } = useGameActions()
 
     const [done, setDone] = useState(false)
 

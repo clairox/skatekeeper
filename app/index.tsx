@@ -9,6 +9,7 @@ const Home = () => {
                 title="New Game"
                 onPress={() => router.push('/gameSetup')}
             />
+            <Button title="History" onPress={() => {}} />
         </>
     )
 }
