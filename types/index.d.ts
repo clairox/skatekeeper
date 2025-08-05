@@ -20,3 +20,23 @@ type Round = {
 type StepProps = {
     next: () => void
 }
+
+type GameRecordRoundPlayer = Player & {
+    copied?: boolean
+}
+
+type GameRecordRound = {
+    trick?: string
+    setterId?: number
+    activePlayers: GameRecordRoundPlayer[]
+    eliminatedPlayers: Player[]
+    completed: boolean
+}
+
+type GameRecord = {
+    letters?: string
+    players: Player[]
+    turn: number
+    winnerId?: number
+    rounds: GameRecordRound[]
+}

@@ -20,6 +20,10 @@ const GameOverPhase = () => {
         throw Error('An unexpected error has occurred: No winner found')
     }
 
+    const playAgain = () => {
+        router.replace(`/gameSetup?key=${Date.now().toString()}`)
+    }
+
     useEffect(() => {
         console.log(`${winner.name} has won`)
     }, [winner])
@@ -28,10 +32,7 @@ const GameOverPhase = () => {
         <>
             <Text>{winner.name} is the winner!</Text>
             <LettersDisplay letters={letters} totalPoints={winner.points} />
-            <Button
-                title="Play again"
-                onPress={() => router.push('/gameSetup')}
-            />
+            <Button title="Play again" onPress={playAgain} />
             <Button title="Home" onPress={() => router.push('/')} />
         </>
     )

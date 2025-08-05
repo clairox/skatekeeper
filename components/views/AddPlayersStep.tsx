@@ -8,7 +8,7 @@ const AddPlayersStep: React.FC<AddPlayersStepProps> = ({ next }) => {
     const { initPlayers } = useGameActions()
 
     const [players, setPlayers] = useState<Player[]>([])
-    const [idCounter, setIdCounter] = useState(0)
+    const [idCounter, setIdCounter] = useState(-1)
 
     const [done, setDone] = useState(false)
 
@@ -23,7 +23,7 @@ const AddPlayersStep: React.FC<AddPlayersStepProps> = ({ next }) => {
             return [...prev, newPlayer]
         })
 
-        console.log(`Player added: ${JSON.stringify(newPlayer, null, 4)}`)
+        console.log(`Player '${newPlayer.name}' added`)
     }
 
     useEffect(() => {
@@ -32,8 +32,12 @@ const AddPlayersStep: React.FC<AddPlayersStepProps> = ({ next }) => {
 
     useEffect(() => {
         if (done) {
-            initPlayers(players)
-            next()
+            const onDone = async () => {
+                await initPlayers(players)
+                next()
+            }
+
+            onDone()
         }
     }, [done, next, players, initPlayers])
 

@@ -1,14 +1,20 @@
 import { Button, StyleSheet, Text, View } from 'react-native'
-import { useGameActions } from '../../context/GameStoreContext'
+import {
+    useActivePlayers,
+    useGameActions,
+    useIsLoading,
+    useTurn,
+} from '../../context/GameStoreContext'
 import LettersDisplay from '../LettersDisplay'
-import { useEffect } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
+import { useGameRecordContext } from '../../context/GameRecordContext'
 
 type CopyingPhaseViewProps = {
     letters: string
     currentPlayer: Player
     setter: Player
     trick: string
-    done: () => void
+    done: () => Promise<void>
 }
 
 const CopyingPhaseView: React.FC<CopyingPhaseViewProps> = ({
@@ -18,23 +24,36 @@ const CopyingPhaseView: React.FC<CopyingPhaseViewProps> = ({
     trick,
     done,
 }) => {
-    const { nextTurn, addPoint, eliminatePlayer } = useGameActions()
+    const gameRecord = useGameRecordContext()
 
-    const onCopySuccess = () => {
+    const { nextTurn, addPoint, eliminatePlayer, setIsLoading } =
+        useGameActions()
+
+    const onCopySuccess = async () => {
         console.log(`${currentPlayer.name} has copied the trick.`)
-        nextTurn()
+        await gameRecord
+            .currentRound()
+            .getPlayer(currentPlayer.id)
+            .setTrickCopySuccess()
+        await nextTurn()
     }
 
-    const onCopyFailed = () => {
-        const points = addPoint(currentPlayer.id)
+    const onCopyFailed = async () => {
+        setIsLoading(true)
+
+        const points = await addPoint(currentPlayer.id)
         console.log(
             `${currentPlayer.name} has failed to copy the trick: ${letters.slice(0, points)}`
         )
+
         if (points === letters.length) {
-            eliminatePlayer(currentPlayer.id)
+            await eliminatePlayer(currentPlayer.id)
             console.log(`${currentPlayer.name} has been eliminated.`)
+        } else {
+            await nextTurn()
         }
-        nextTurn()
+
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -45,7 +64,7 @@ const CopyingPhaseView: React.FC<CopyingPhaseViewProps> = ({
 
     useEffect(() => {
         console.log(`Current copier: ${currentPlayer.name}`)
-    }, [currentPlayer.id, currentPlayer.name])
+    }, [currentPlayer, setter])
 
     return (
         <>
@@ -75,4 +94,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default CopyingPhaseView
+export default memo(CopyingPhaseView)

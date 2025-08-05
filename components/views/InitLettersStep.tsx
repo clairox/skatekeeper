@@ -15,8 +15,8 @@ const InitLettersStep: React.FC<InitLettersStepProps> = ({ next }) => {
         }
     }, [done, next])
 
-    const _initLetters = (letters: string) => {
-        initLetters(letters)
+    const _initLetters = async (letters: string) => {
+        await initLetters(letters)
         setDone(true)
     }
 

@@ -6,7 +6,7 @@ import LettersDisplay from '../LettersDisplay'
 type SettingPhaseProps = {
     letters: string
     currentPlayer: Player
-    setTrick: (trick: string) => void
+    setTrick: (trick: string) => Promise<void>
     setSetter: (setter: Player) => void
 }
 
@@ -18,15 +18,16 @@ const SettingPhaseView: React.FC<SettingPhaseProps> = ({
 }) => {
     const { nextTurn } = useGameActions()
 
-    const onSetSuccess = (trick: string) => {
-        setTrick(trick)
+    const onSetSuccess = async (trick: string) => {
+        await setTrick(trick)
         console.log(`The trick has been set to ${trick}.`)
-        nextTurn()
+
+        await nextTurn()
     }
 
-    const onSetFailed = () => {
+    const onSetFailed = async () => {
         console.log(`Trick was not set.`)
-        nextTurn()
+        await nextTurn()
     }
 
     useEffect(() => {
