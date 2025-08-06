@@ -1,32 +1,30 @@
 import { Button, Text } from 'react-native'
 import LettersDisplay from '../../components/LettersDisplay'
 import { useRouter } from 'expo-router'
-import { useLetters, usePlayers } from '../../context/GameStoreContext'
-import { useEffect } from 'react'
-import { useSearchParams } from 'expo-router/build/hooks'
+import { useLetters, usePlayers, useWinnerId } from '../../context/GameContext'
 
 const GameOverPhase = () => {
     const router = useRouter()
-    const searchParams = useSearchParams()
 
     const letters = useLetters()
     const players = usePlayers()
+    const winnerId = useWinnerId()
+
+    if (winnerId == null) {
+        throw new Error('An unexpected error has occurred: No winner found')
+    }
 
     const winner: Player | undefined = players.find(
-        player => player.id.toString() === searchParams.get('winner')
+        player => player.id === winnerId
     )
 
     if (!winner) {
-        throw Error('An unexpected error has occurred: No winner found')
+        throw new Error('An unexpected error has occurred: No winner found')
     }
 
     const playAgain = () => {
         router.replace(`/gameSetup?key=${Date.now().toString()}`)
     }
-
-    useEffect(() => {
-        console.log(`${winner.name} has won`)
-    }, [winner])
 
     return (
         <>

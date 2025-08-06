@@ -1,12 +1,15 @@
 import { Button, Text, View } from 'react-native'
 import { useEffect, useState } from 'react'
-import { useGameActions } from '../../context/GameStoreContext'
 
-type InitLettersStepProps = StepProps
+type InitLettersStepProps = {
+    setLetters: (newLetters: string) => void
+    next: () => void
+}
 
-const InitLettersStep: React.FC<InitLettersStepProps> = ({ next }) => {
-    const { initLetters } = useGameActions()
-
+const InitLettersStep: React.FC<InitLettersStepProps> = ({
+    setLetters,
+    next,
+}) => {
     const [done, setDone] = useState(false)
 
     useEffect(() => {
@@ -15,8 +18,8 @@ const InitLettersStep: React.FC<InitLettersStepProps> = ({ next }) => {
         }
     }, [done, next])
 
-    const _initLetters = async (letters: string) => {
-        await initLetters(letters)
+    const initLetters = async (letters: string) => {
+        setLetters(letters)
         setDone(true)
     }
 
@@ -30,8 +33,8 @@ const InitLettersStep: React.FC<InitLettersStepProps> = ({ next }) => {
                     justifyContent: 'center',
                 }}
             >
-                <Button title="SKATE" onPress={() => _initLetters('SKATE')} />
-                <Button title="SK8" onPress={() => _initLetters('SK8')} />
+                <Button title="SKATE" onPress={() => initLetters('SKATE')} />
+                <Button title="SK8" onPress={() => initLetters('SK8')} />
             </View>
         </>
     )

@@ -5,10 +5,12 @@
 - [ ] App settings
 - [ ] UI design
 - [ ] Redos
+- [ ] Prevent user from going back in /game route
 
 ### In Progress
 
 - [ ] Game history
+- [ ] Update routes (/game, /game/setup, /game/play, /game/done)
 
 ### Done
 

@@ -1,39 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
-import { useGameActions } from '../../context/GameStoreContext'
+import { useGameActions } from '../../context/GameContext'
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native'
 import LettersDisplay from '../LettersDisplay'
 
 type SettingPhaseProps = {
     letters: string
     currentPlayer: Player
-    setTrick: (trick: string) => Promise<void>
-    setSetter: (setter: Player) => void
 }
 
 const SettingPhaseView: React.FC<SettingPhaseProps> = ({
     letters,
     currentPlayer,
-    setTrick,
-    setSetter,
 }) => {
-    const { nextTurn } = useGameActions()
-
-    const onSetSuccess = async (trick: string) => {
-        await setTrick(trick)
-        console.log(`The trick has been set to ${trick}.`)
-
-        await nextTurn()
-    }
-
-    const onSetFailed = async () => {
-        console.log(`Trick was not set.`)
-        await nextTurn()
-    }
-
-    useEffect(() => {
-        setSetter(currentPlayer)
-        console.log(`Current setter: ${currentPlayer.name}`)
-    }, [currentPlayer, setSetter])
+    const { onPlayerSetSuccess, onPlayerSetFailure } = useGameActions()
 
     return (
         <>
@@ -43,27 +22,24 @@ const SettingPhaseView: React.FC<SettingPhaseProps> = ({
                 totalPoints={currentPlayer.points}
             />
             <ActionRow
-                onTrickSetSuccess={onSetSuccess}
-                onTrickSetFailed={onSetFailed}
+                onSetSuccess={onPlayerSetSuccess}
+                onSetFailed={onPlayerSetFailure}
             />
         </>
     )
 }
 
 type ActionRowProps = {
-    onTrickSetSuccess: (trick: string) => void
-    onTrickSetFailed: () => void
+    onSetSuccess: (trick: string) => void
+    onSetFailed: () => void
 }
 
-const ActionRow: React.FC<ActionRowProps> = ({
-    onTrickSetSuccess,
-    onTrickSetFailed,
-}) => {
+const ActionRow: React.FC<ActionRowProps> = ({ onSetSuccess, onSetFailed }) => {
     const [actionRow, setActionRow] = useState(<></>)
 
     const actionButtonRow = useRef(
         <View style={[styles.actionRow, styles.actionButtonRow]}>
-            <Button title="Missed" onPress={onTrickSetFailed} />
+            <Button title="Missed" onPress={onSetFailed} />
             <Button
                 title="Landed"
                 onPress={() => setActionRow(actionInputRow.current)}
@@ -80,7 +56,7 @@ const ActionRow: React.FC<ActionRowProps> = ({
                         return
                     }
 
-                    onTrickSetSuccess(trick)
+                    onSetSuccess(trick)
                 }}
                 autoFocus
                 style={styles.trickInput}

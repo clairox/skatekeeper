@@ -2,22 +2,54 @@ import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import InitLettersStep from '../../components/views/InitLettersStep'
 import AddPlayersStep from '../../components/views/AddPlayersStep'
-import ShuffleStep from '../../components/views/ShufflePlayersStep'
+import RPSAnimationStep from '../../components/views/RPSAnimationStep'
+import { useGameActions } from '../../context/GameContext'
 
 const GameSetupPhase = () => {
     const router = useRouter()
+
+    const { initGame } = useGameActions()
+
+    const [letters, setLetters] = useState<string | null>(null)
+    const [players, setPlayers] = useState<Player[]>([])
 
     const [step, setStep] = useState<'letters' | 'players' | 'shuffling'>(
         'letters'
     )
 
+    const onSetupComplete = async () => {
+        if (!letters || players.length === 0) {
+            throw new Error('Could not initialize game: Missing values')
+        }
+
+        await initGame(letters, players)
+        router.push('/gamePlay')
+    }
+
     switch (step) {
         case 'letters':
-            return <InitLettersStep next={() => setStep('players')} />
+            return (
+                <InitLettersStep
+                    setLetters={setLetters}
+                    next={() => setStep('players')}
+                />
+            )
         case 'players':
-            return <AddPlayersStep next={() => setStep('shuffling')} />
+            return (
+                <AddPlayersStep
+                    players={players}
+                    setPlayers={setPlayers}
+                    next={() => setStep('shuffling')}
+                />
+            )
         case 'shuffling':
-            return <ShuffleStep next={() => router.push('gamePlay')} />
+            return (
+                <RPSAnimationStep
+                    players={players}
+                    setPlayers={setPlayers}
+                    next={onSetupComplete}
+                />
+            )
         default:
             router.push('/')
     }
