@@ -1,4 +1,3 @@
-import MultiPlatformSafeAreaView from '../../components/MultiPlatformSafeAreaView'
 import { Slot } from 'expo-router'
 import { GameProvider } from '../../context/GameContext'
 import { GameRecordHandlerProvider } from '../../context/GameRecordHandlerContext'
@@ -38,9 +37,7 @@ const GameLayout = () => {
     return (
         <GameRecordHandlerProvider key={key}>
             <GameProvider>
-                <MultiPlatformSafeAreaView>
-                    <Slot />
-                </MultiPlatformSafeAreaView>
+                <Slot />
             </GameProvider>
         </GameRecordHandlerProvider>
     )

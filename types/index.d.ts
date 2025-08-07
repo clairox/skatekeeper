@@ -33,12 +33,20 @@ type GameRecordRound = {
     completed: boolean
 }
 
-type GameRecord = {
+type GameRecordData = {
     letters?: string
     players: Player[]
     turn: number
     winnerId?: number
     rounds: GameRecordRound[]
+}
+
+type GameRecord = {
+    id: number
+    completed: boolean
+    data: GameRecordData
+    createdAt: Date
+    completedAt: Date | null
 }
 
 type UpdateGameRecord = {

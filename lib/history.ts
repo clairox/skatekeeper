@@ -19,17 +19,23 @@ const setStoredHistory = async (value: GameRecord[]) => {
     }
 }
 
-const getRecord = async (idx: number): Promise<GameRecord> => {
-    const history = await getStoredHistory()
-    return history[idx]
+const getRecord = async (id: number): Promise<GameRecord | undefined> => {
+    const history = (await getStoredHistory()) as GameRecord[]
+    return history.find(record => record.id === id)
 }
 
 const newRecord = async (): Promise<GameRecord> => {
-    const history = await getStoredHistory()
+    const history = (await getStoredHistory()) as GameRecord[]
     history.push({
-        turn: 0,
-        players: [],
-        rounds: [],
+        id: history.length,
+        completed: false,
+        data: {
+            turn: 0,
+            players: [],
+            rounds: [],
+        },
+        createdAt: new Date(),
+        completedAt: null,
     })
     await setStoredHistory(history)
 
