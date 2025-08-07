@@ -11,7 +11,7 @@
 ### In Progress
 
 - [ ] Game history
-- [ ] Update routes (/game, /game/setup, /game/play, /game/done)
+- [x] Update routes (/game, /game/setup, /game/play, /game/done)
 
 ### Done
 
