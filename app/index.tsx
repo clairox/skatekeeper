@@ -7,9 +7,9 @@ const Home = () => {
         <>
             <Button
                 title="New Game"
-                onPress={() => router.push('/gameSetup')}
+                onPress={() => router.push('/game/setup')}
             />
-            <Button title="History" onPress={() => {}} />
+            <Button title="History" onPress={() => router.push('/history')} />
         </>
     )
 }

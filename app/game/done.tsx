@@ -23,7 +23,7 @@ const GameOverPhase = () => {
     }
 
     const playAgain = () => {
-        router.replace(`/gameSetup?key=${Date.now().toString()}`)
+        router.replace(`./setup?key=${Date.now().toString()}`)
     }
 
     return (
@@ -31,7 +31,7 @@ const GameOverPhase = () => {
             <Text>{winner.name} is the winner!</Text>
             <LettersDisplay letters={letters} totalPoints={winner.points} />
             <Button title="Play again" onPress={playAgain} />
-            <Button title="Home" onPress={() => router.push('/')} />
+            <Button title="Home" onPress={() => router.dismissTo('/')} />
         </>
     )
 }

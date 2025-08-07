@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useGameActions } from '../../context/GameContext'
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native'
+import {
+    BackHandler,
+    Button,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from 'react-native'
 import LettersDisplay from '../LettersDisplay'
 
 type SettingPhaseProps = {
@@ -61,6 +68,42 @@ const ActionRow: React.FC<ActionRowProps> = ({ onSetSuccess, onSetFailed }) => {
     )
 
     const actionInputRow = useRef(
+        <ActionInputRow
+            onSetSuccess={onSetSuccess}
+            close={() => setActionRow(actionButtonRow.current)}
+        />
+    )
+
+    useEffect(() => {
+        setActionRow(actionButtonRow.current)
+    }, [])
+
+    return actionRow
+}
+
+type ActionInputRowProps = {
+    onSetSuccess: (trick: string) => void
+    close: () => void
+}
+
+const ActionInputRow: React.FC<ActionInputRowProps> = ({
+    onSetSuccess,
+    close,
+}) => {
+    useEffect(() => {
+        const onBackPress = () => {
+            close()
+            return true
+        }
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            onBackPress
+        )
+
+        return () => backHandler.remove()
+    }, [close])
+
+    return (
         <View style={[styles.actionRow, styles.actionInputRow]}>
             <TextInput
                 onSubmitEditing={event => {
@@ -74,18 +117,9 @@ const ActionRow: React.FC<ActionRowProps> = ({ onSetSuccess, onSetFailed }) => {
                 autoFocus
                 style={styles.trickInput}
             />
-            <Button
-                title="x"
-                onPress={() => setActionRow(actionButtonRow.current)}
-            />
+            <Button title="x" onPress={close} />
         </View>
     )
-
-    useEffect(() => {
-        setActionRow(actionButtonRow.current)
-    }, [])
-
-    return actionRow
 }
 
 export default SettingPhaseView

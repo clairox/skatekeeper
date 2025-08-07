@@ -24,7 +24,7 @@ const GameSetupPhase = () => {
 
         try {
             await initGame(letters, players)
-            router.push('/gamePlay')
+            router.push('./play')
         } catch (err) {
             console.error(err)
         }

@@ -23,7 +23,7 @@ const GamePlayPhase = () => {
 
     useEffect(() => {
         if (winnerId != null) {
-            router.push('/gameOver')
+            router.push('./done')
         }
     }, [winnerId, router])
 
