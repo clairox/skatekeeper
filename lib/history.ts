@@ -41,7 +41,6 @@ const saveRecord = async (idx: number, record: GameRecord): Promise<void> => {
     const history = await getStoredHistory()
     history[idx] = record
     await setStoredHistory(history)
-    // console.log(JSON.stringify(history[idx], null, 4))
 }
 
 const getRecords = async (): Promise<GameRecord[]> => {

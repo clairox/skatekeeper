@@ -14,6 +14,22 @@ const SettingPhaseView: React.FC<SettingPhaseProps> = ({
 }) => {
     const { onPlayerSetSuccess, onPlayerSetFailure } = useGameActions()
 
+    const onSetSuccess = async (trick: string) => {
+        try {
+            await onPlayerSetSuccess(trick)
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    const onSetFailure = async () => {
+        try {
+            await onPlayerSetFailure()
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
     return (
         <>
             <Text>{currentPlayer.name} sets the trick!</Text>
@@ -21,10 +37,7 @@ const SettingPhaseView: React.FC<SettingPhaseProps> = ({
                 letters={letters}
                 totalPoints={currentPlayer.points}
             />
-            <ActionRow
-                onSetSuccess={onPlayerSetSuccess}
-                onSetFailed={onPlayerSetFailure}
-            />
+            <ActionRow onSetSuccess={onSetSuccess} onSetFailed={onSetFailure} />
         </>
     )
 }

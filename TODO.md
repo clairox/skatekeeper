@@ -6,6 +6,7 @@
 - [ ] UI design
 - [ ] Redos
 - [ ] Prevent user from going back in /game route
+- [ ] Move store action logic into set() scope
 
 ### In Progress
 

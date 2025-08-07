@@ -40,3 +40,21 @@ type GameRecord = {
     winnerId?: number
     rounds: GameRecordRound[]
 }
+
+type UpdateGameRecord = {
+    playerId: number
+    type: 'set' | 'copy'
+    status: 'success' | 'failed'
+    nextTurn: number
+    trick?: string
+    players?: Player[]
+    activePlayers?: Player[]
+    playerEliminated?: boolean
+    winnerId?: number
+    roundOver?: boolean
+}
+
+type GameRecordHandler = {
+    init: (letters: string, players: Player[]) => Promise<void>
+    update: (data: UpdateGameRecord) => Promise<void>
+}

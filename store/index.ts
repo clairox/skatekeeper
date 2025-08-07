@@ -19,7 +19,7 @@ type GameStateActions = {
     onPlayerCopyFailure: () => Promise<void>
 }
 
-export const createGameStore = () => {
+export const createGameStore = (recordHandler: GameRecordHandler) => {
     const getNextTurn = (currentTurn: number, activePlayers: Player[]) => {
         if (currentTurn + 1 >= activePlayers.length) {
             return 0
@@ -62,6 +62,8 @@ export const createGameStore = () => {
                     setterId: activePlayers[0].id,
                 })
 
+                await recordHandler.init(letters.toUpperCase(), activePlayers)
+
                 console.log(`Letters: ${letters}`)
                 console.log(
                     `Added ${players.length} players: ${JSON.stringify(players.map(player => player.name))}`
@@ -80,6 +82,14 @@ export const createGameStore = () => {
                     turn: nextTurn,
                 })
 
+                await recordHandler.update({
+                    playerId: activePlayers[turn].id,
+                    type: 'set',
+                    status: 'success',
+                    trick,
+                    nextTurn,
+                })
+
                 console.log(
                     `${activePlayers[turn].name} has set the trick to ${trick}.`
                 )
@@ -88,6 +98,13 @@ export const createGameStore = () => {
                 const { activePlayers, turn } = get()
                 const nextTurn = getNextTurn(turn, activePlayers)
                 set({ turn: nextTurn, setterId: activePlayers[nextTurn].id })
+
+                await recordHandler.update({
+                    playerId: activePlayers[turn].id,
+                    type: 'set',
+                    status: 'failed',
+                    nextTurn,
+                })
 
                 console.log(
                     `${activePlayers[turn].name} failed to set the trick.`
@@ -101,6 +118,14 @@ export const createGameStore = () => {
                 set({
                     turn: getNextTurn(turn, activePlayers),
                     currentTrick: roundOver ? null : currentTrick,
+                })
+
+                await recordHandler.update({
+                    playerId: activePlayers[turn].id,
+                    type: 'copy',
+                    status: 'success',
+                    nextTurn,
+                    roundOver,
                 })
 
                 console.log(
@@ -157,7 +182,17 @@ export const createGameStore = () => {
                     currentTrick: roundOver ? null : currentTrick,
                 })
 
-                console.log(`${letters.slice(0, activePlayers[turn].points)}`)
+                await recordHandler.update({
+                    playerId: currentPlayer.id,
+                    playerEliminated: shouldEliminate,
+                    type: 'copy',
+                    status: 'failed',
+                    nextTurn,
+                    players: updatedPlayers,
+                    activePlayers: updatedActivePlayers,
+                    winnerId: winner?.id,
+                    roundOver,
+                })
 
                 console.log(
                     `${currentPlayer.name} has failed to copy the ${currentTrick}.`

@@ -22,8 +22,12 @@ const GameSetupPhase = () => {
             throw new Error('Could not initialize game: Missing values')
         }
 
-        await initGame(letters, players)
-        router.push('/gamePlay')
+        try {
+            await initGame(letters, players)
+            router.push('/gamePlay')
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     switch (step) {

@@ -15,6 +15,22 @@ const CopyingPhaseView: React.FC<CopyingPhaseViewProps> = ({
 }) => {
     const { onPlayerCopySuccess, onPlayerCopyFailure } = useGameActions()
 
+    const onCopySuccess = async () => {
+        try {
+            await onPlayerCopySuccess()
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    const onCopyFailure = async () => {
+        try {
+            await onPlayerCopyFailure()
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
     return (
         <>
             <Text>Trick to copy: {currentTrick}</Text>
@@ -24,8 +40,8 @@ const CopyingPhaseView: React.FC<CopyingPhaseViewProps> = ({
                 totalPoints={currentPlayer.points}
             />
             <View style={[styles.actionRow, styles.actionButtonRow]}>
-                <Button title="Missed" onPress={onPlayerCopyFailure} />
-                <Button title="Landed" onPress={onPlayerCopySuccess} />
+                <Button title="Missed" onPress={onCopyFailure} />
+                <Button title="Landed" onPress={onCopySuccess} />
             </View>
         </>
     )
