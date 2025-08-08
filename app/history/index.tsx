@@ -4,6 +4,14 @@ import { useEffect, useState } from 'react'
 import { Link } from 'expo-router'
 import StyledText from '../../components/ui/StyledText'
 
+const localStringOptions: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+}
+
 const GameHistory = () => {
     const [records, setRecords] = useState<GameRecord[]>([])
 
@@ -19,9 +27,12 @@ const GameHistory = () => {
         return (
             <FlatList
                 data={records.map(record => {
+                    const dateTimeString = new Date(
+                        record.createdAt
+                    ).toLocaleString('en-US', localStringOptions)
                     return {
                         id: record.id,
-                        title: `${new Date(record.createdAt).toDateString()} ${new Date(record.createdAt).toTimeString()}${record.completed ? '' : ' - Incomplete'}`,
+                        title: `${dateTimeString}${record.completed ? '' : ' - Incomplete'}`,
                     }
                 })}
                 renderItem={({ item }) => {
