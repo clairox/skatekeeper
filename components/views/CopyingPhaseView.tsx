@@ -1,6 +1,8 @@
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { Button, StyleSheet, View } from 'react-native'
 import { useGameActions } from '../../context/GameContext'
 import LettersDisplay from '../LettersDisplay'
+import StyledText from '../ui/StyledText'
+import StyledView from '../ui/StyledView'
 
 type CopyingPhaseViewProps = {
     letters: string
@@ -32,9 +34,9 @@ const CopyingPhaseView: React.FC<CopyingPhaseViewProps> = ({
     }
 
     return (
-        <>
-            <Text>Trick to copy: {currentTrick}</Text>
-            <Text>{`${currentPlayer.name} it's your turn!`}</Text>
+        <StyledView>
+            <StyledText>Trick to copy: {currentTrick}</StyledText>
+            <StyledText>{`${currentPlayer.name} it's your turn!`}</StyledText>
             <LettersDisplay
                 letters={letters}
                 totalPoints={currentPlayer.points}
@@ -43,7 +45,7 @@ const CopyingPhaseView: React.FC<CopyingPhaseViewProps> = ({
                 <Button title="Missed" onPress={onCopyFailure} />
                 <Button title="Landed" onPress={onCopySuccess} />
             </View>
-        </>
+        </StyledView>
     )
 }
 
@@ -52,7 +54,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
     },
     actionButtonRow: {
         gap: 40,

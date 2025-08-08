@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { Text } from 'react-native'
+import StyledText from '../ui/StyledText'
+import StyledView from '../ui/StyledView'
 
 const DELAY = 250
 
@@ -20,12 +21,12 @@ const RPSAnimationStep: React.FC<ShufflePlayersStepProps> = ({
     }, [next])
 
     return (
-        <>
+        <StyledView>
             {players.map(player => (
-                <Text key={player.name}>{player.name}</Text>
+                <StyledText key={player.name}>{player.name}</StyledText>
             ))}
-            <Text>Ro-sham-bo!</Text>
-        </>
+            <StyledText>Ro-sham-bo!</StyledText>
+        </StyledView>
     )
 }
 

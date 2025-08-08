@@ -37,6 +37,7 @@ const PlayerInput: React.FC<PlayerInputProps> = ({
                     height: 40,
                     borderWidth: 1,
                     borderColor: '#000000',
+                    fontFamily: 'SpaceGrotesk_400Regular',
                 }}
             />
             <Pressable

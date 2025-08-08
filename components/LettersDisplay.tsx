@@ -1,4 +1,5 @@
-import { StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native'
+import { StyleProp, StyleSheet, TextStyle, View } from 'react-native'
+import StyledText from './ui/StyledText'
 
 type LettersDisplayProps = {
     letters: string
@@ -18,9 +19,9 @@ const LettersDisplay: React.FC<LettersDisplayProps> = ({
                 }
 
                 return (
-                    <Text key={`${idx}-${letter}`} style={letterStyles}>
+                    <StyledText key={`${idx}-${letter}`} style={letterStyles}>
                         {letter}
-                    </Text>
+                    </StyledText>
                 )
             })}
         </View>
@@ -32,12 +33,12 @@ export default LettersDisplay
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        gap: 5,
     },
     letter: {
+        fontFamily: 'ShantellSans_600SemiBold',
         fontSize: 40,
-        fontWeight: 'bold',
         color: '#ccc',
+        letterSpacing: 0,
     },
     earnedLetter: {
         color: '#000',

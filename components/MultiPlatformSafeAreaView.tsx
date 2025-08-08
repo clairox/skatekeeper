@@ -8,7 +8,10 @@ import {
     ViewProps,
 } from 'react-native'
 
-const MultiPlatformSafeAreaView: React.FC<ViewProps> = props => {
+const MultiPlatformSafeAreaView: React.FC<ViewProps> = ({
+    style,
+    ...props
+}) => {
     const colorScheme = useColorScheme()
 
     const themeContainerStyle =
@@ -20,7 +23,7 @@ const MultiPlatformSafeAreaView: React.FC<ViewProps> = props => {
 
     return (
         <View
-            style={[styles.androidSafeArea, themeContainerStyle]}
+            style={[styles.androidSafeArea, themeContainerStyle, style]}
             {...props}
         />
     )

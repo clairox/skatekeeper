@@ -1,6 +1,8 @@
-import { Button, Text, View } from 'react-native'
+import { Button, View } from 'react-native'
 import PlayerInput from '../PlayerInput'
 import { useEffect, useState } from 'react'
+import StyledText from '../ui/StyledText'
+import StyledView from '../ui/StyledView'
 
 type AddPlayersStepProps = {
     players: Player[]
@@ -30,8 +32,8 @@ const AddPlayersStep: React.FC<AddPlayersStepProps> = ({
     }, [players.length])
 
     return (
-        <>
-            <Text>{"Who's playing?"}</Text>
+        <StyledView>
+            <StyledText>{"Who's playing?"}</StyledText>
             <View style={{ gap: 10, paddingHorizontal: 30, width: '100%' }}>
                 {players.map((player, idx) => (
                     <View
@@ -39,10 +41,12 @@ const AddPlayersStep: React.FC<AddPlayersStepProps> = ({
                         style={{
                             justifyContent: 'center',
                             alignItems: 'center',
-                            height: 40,
+                            height: 30,
                         }}
                     >
-                        <Text style={{ fontSize: 20 }}>{player.name}</Text>
+                        <StyledText style={{ fontSize: 20 }}>
+                            {player.name}
+                        </StyledText>
                     </View>
                 ))}
                 <PlayerInput
@@ -51,7 +55,7 @@ const AddPlayersStep: React.FC<AddPlayersStepProps> = ({
                 />
             </View>
             <Button title="Done" disabled={players.length < 2} onPress={next} />
-        </>
+        </StyledView>
     )
 }
 

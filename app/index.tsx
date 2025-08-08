@@ -30,7 +30,7 @@ export default Home
 
 const styles = StyleSheet.create({
     container: {
-        flex: 0.75,
+        flex: 0.9,
         alignItems: 'center',
     },
     brand: {

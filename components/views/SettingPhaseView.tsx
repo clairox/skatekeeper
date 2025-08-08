@@ -1,14 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useGameActions } from '../../context/GameContext'
-import {
-    BackHandler,
-    Button,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
-} from 'react-native'
+import { BackHandler, Button, StyleSheet, TextInput, View } from 'react-native'
 import LettersDisplay from '../LettersDisplay'
+import StyledText from '../ui/StyledText'
+import StyledView from '../ui/StyledView'
 
 type SettingPhaseProps = {
     letters: string
@@ -38,14 +33,14 @@ const SettingPhaseView: React.FC<SettingPhaseProps> = ({
     }
 
     return (
-        <>
-            <Text>{currentPlayer.name} sets the trick!</Text>
+        <StyledView>
+            <StyledText>{currentPlayer.name} sets the trick!</StyledText>
             <LettersDisplay
                 letters={letters}
                 totalPoints={currentPlayer.points}
             />
             <ActionRow onSetSuccess={onSetSuccess} onSetFailed={onSetFailure} />
-        </>
+        </StyledView>
     )
 }
 
@@ -129,7 +124,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
     },
     actionButtonRow: {
         gap: 40,

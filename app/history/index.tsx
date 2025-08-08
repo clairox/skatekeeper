@@ -1,7 +1,8 @@
-import { FlatList, StyleSheet, Text } from 'react-native'
+import { FlatList, StyleSheet } from 'react-native'
 import history from '../../lib/history'
 import { useEffect, useState } from 'react'
 import { Link } from 'expo-router'
+import StyledText from '../../components/ui/StyledText'
 
 const GameHistory = () => {
     const [records, setRecords] = useState<GameRecord[]>([])
@@ -26,7 +27,9 @@ const GameHistory = () => {
                 renderItem={({ item }) => {
                     return (
                         <Link href={`./${item.id}`}>
-                            <Text style={styles.text}>{item.title}</Text>
+                            <StyledText style={styles.text}>
+                                {item.title}
+                            </StyledText>
                         </Link>
                     )
                 }}
@@ -36,7 +39,7 @@ const GameHistory = () => {
         )
     }
 
-    return <Text>Nothing here</Text>
+    return <StyledText>Nothing here</StyledText>
 }
 
 export default GameHistory
@@ -48,6 +51,7 @@ const styles = StyleSheet.create({
         marginVertical: 30,
     },
     text: {
-        fontSize: 20,
+        fontSize: 14,
+        textAlign: 'left',
     },
 })
