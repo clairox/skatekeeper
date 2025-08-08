@@ -6,6 +6,7 @@
 - [ ] UI design
 - [ ] Redos
 - [ ] Move store action logic into set() scope
+- [ ] Use uuidv4 for history ids
 
 ### In Progress
 
