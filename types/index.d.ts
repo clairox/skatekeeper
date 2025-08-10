@@ -54,6 +54,8 @@ type HistoryRecordHandler = {
     update: (data: UpdateHistoryValues) => Promise<void>
 }
 
+type AddHistoryValues = Omit<HistoryRecord, 'id'>
+
 type UpdateHistoryValues = {
     playerId: number
     type: 'set' | 'copy'

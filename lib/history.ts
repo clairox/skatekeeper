@@ -24,26 +24,16 @@ const getRecord = async (id: number): Promise<HistoryRecord | undefined> => {
     return history.find(record => record.id === id)
 }
 
-const newRecord = async (): Promise<HistoryRecord> => {
-    const history = (await getStoredHistory()) as HistoryRecord[]
-    history.push({
-        id: history.length,
-        completed: false,
-        data: {
-            turn: 0,
-            players: [],
-            rounds: [],
-        },
-        createdAt: new Date(),
-        completedAt: null,
-    })
+const addRecord = async (data: AddHistoryValues): Promise<HistoryRecord> => {
+    const history = await getStoredHistory()
+    const id = history.length > 0 ? history[history.length - 1].id + 1 : 0
+    history.push({ ...data, id })
     await setStoredHistory(history)
 
-    const recordCount = history.length
-    return history[recordCount - 1]
+    return history[history.length - 1]
 }
 
-const saveRecord = async (
+const updateRecord = async (
     idx: number,
     record: HistoryRecord
 ): Promise<void> => {
@@ -72,8 +62,8 @@ const clearHistory = async (): Promise<void> => {
 
 export default {
     getRecord,
-    newRecord,
-    saveRecord,
+    addRecord,
+    updateRecord,
     getRecords,
     deleteRecord,
     deleteIncompleteRecords,

@@ -22,22 +22,23 @@ export const HistoryRecordProvider: React.FC<HistoryRecordProviderProps> = ({
     const record = useRef<HistoryRecord>({} as HistoryRecord)
 
     useEffect(() => {
-        const fetchRecord = async () => {
-            const result = await (recordId
-                ? (history.getRecord(recordId) ?? history.newRecord())
-                : history.newRecord())
-
-            record.current = result!
+        const fetchRecord = async (id: number) => {
+            console.log('Fetching record...')
+            const result = await history.getRecord(id)
+            if (result) {
+                record.current = result
+            }
         }
 
-        fetchRecord()
-        console.log('Initializing record...')
+        if (recordId) {
+            fetchRecord(recordId)
+        }
     }, [recordId])
 
     const saveHistory = async (): Promise<void> => {
         const idx = await (recordId ??
             history.getRecords().then(records => records.length - 1))
-        history.saveRecord(idx, record.current)
+        history.updateRecord(idx, record.current)
     }
 
     const initRound = (): HistoryRound => {
@@ -80,10 +81,26 @@ export const HistoryRecordProvider: React.FC<HistoryRecordProviderProps> = ({
     }
 
     const init = async (letters: string, players: Player[]): Promise<void> => {
-        setRecordData({ letters, players, turn: 0, rounds: [] })
-        const rounds = [...record.current.data.rounds, initRound()]
-        setRecordData({ rounds })
-        await saveHistory()
+        console.log('Initializing record...')
+        const newRecord = await history.addRecord({
+            completed: false,
+            data: {
+                letters,
+                turn: 0,
+                players,
+                rounds: [
+                    {
+                        activePlayers: players,
+                        eliminatedPlayers: [],
+                        completed: false,
+                    },
+                ],
+            },
+            createdAt: new Date(),
+            completedAt: null,
+        })
+
+        setRecord(newRecord)
     }
 
     const update = async (data: UpdateHistoryValues): Promise<void> => {
