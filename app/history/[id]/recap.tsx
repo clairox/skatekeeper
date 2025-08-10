@@ -1,11 +1,12 @@
-import { useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { View, StyleSheet, FlatList } from 'react-native'
+import { View, StyleSheet, FlatList, Button } from 'react-native'
 import history from '../../../lib/history'
 import StyledText from '../../../components/ui/StyledText'
 import LettersDisplay from '../../../components/ui/LettersDisplay'
 
 const HistoryEntryRecapPage = () => {
+    const router = useRouter()
     const { id } = useLocalSearchParams() as { id: string }
 
     const [rounds, setRounds] = useState<HistoryRound[]>([])
@@ -38,9 +39,20 @@ const HistoryEntryRecapPage = () => {
                 }
                 renderItem={({ item: round, index }) => (
                     <View style={styles.roundContainer}>
-                        <StyledText
-                            style={styles.roundHeader}
-                        >{`${index + 1}: ${Boolean(round.trick && round.completed) ? round.trick : 'Incomplete'}`}</StyledText>
+                        <View style={styles.roundHeader}>
+                            <StyledText
+                                style={styles.roundHeaderText}
+                            >{`${index + 1}: ${Boolean(round.trick && round.completed) ? round.trick : 'Incomplete'}`}</StyledText>
+                            <Button
+                                title="Continue"
+                                onPress={() =>
+                                    router.push({
+                                        pathname: '/game/play',
+                                        params: { id },
+                                    })
+                                }
+                            />
+                        </View>
                         {round.activePlayers.map((player, idx) => {
                             return (
                                 <View key={`${id}${player.id}`}>
@@ -88,6 +100,10 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
     roundHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    roundHeaderText: {
         fontSize: 26,
         textAlign: 'left',
         textDecorationLine: 'underline',
