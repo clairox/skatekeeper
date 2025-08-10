@@ -82,7 +82,6 @@ const HistoryPage = () => {
 
     return (
         <View style={styles.container}>
-            {' '}
             <OverflowMenu
                 options={[
                     {
