@@ -81,7 +81,7 @@ const HistoryPage = () => {
                             </Link>
                         )
                     }}
-                    keyExtractor={item => item.id.toString()}
+                    keyExtractor={item => item.id.toString() + item.title}
                     contentContainerStyle={styles.listContent}
                     style={styles.list}
                 />
