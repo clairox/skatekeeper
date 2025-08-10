@@ -43,7 +43,7 @@ const HistoryEntryRecapPage = () => {
                         >{`${index + 1}: ${Boolean(round.trick && round.completed) ? round.trick : 'Incomplete'}`}</StyledText>
                         {round.activePlayers.map((player, idx) => {
                             return (
-                                <View key={idx + player.id}>
+                                <View key={`${id}${player.id}`}>
                                     <StyledText>
                                         {player.name}
                                         {player.id === round.setterId &&
@@ -58,7 +58,7 @@ const HistoryEntryRecapPage = () => {
                         })}
                         {round.eliminatedPlayers.map((player, idx) => {
                             return (
-                                <View key={idx + player.id}>
+                                <View key={`${id}${player.id}`}>
                                     <StyledText>
                                         {player.name} - Eliminated
                                     </StyledText>
