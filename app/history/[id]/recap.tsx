@@ -41,20 +41,14 @@ const HistoryEntryRecapPage = () => {
                         <StyledText
                             style={styles.roundHeader}
                         >{`${index + 1}: ${Boolean(round.trick && round.completed) ? round.trick : 'Incomplete'}`}</StyledText>
-                        {round.setterId != null && (
-                            <StyledText>
-                                Setter:{' '}
-                                {
-                                    round.activePlayers.find(
-                                        player => player.id === round.setterId
-                                    )!.name
-                                }
-                            </StyledText>
-                        )}
                         {round.activePlayers.map((player, idx) => {
                             return (
                                 <View key={idx + player.id}>
-                                    <StyledText>{player.name}</StyledText>
+                                    <StyledText>
+                                        {player.name}
+                                        {player.id === round.setterId &&
+                                            ' - Setter'}
+                                    </StyledText>
                                     <LettersDisplay
                                         letters={letters}
                                         totalPoints={player.points}
@@ -65,7 +59,9 @@ const HistoryEntryRecapPage = () => {
                         {round.eliminatedPlayers.map((player, idx) => {
                             return (
                                 <View key={idx + player.id}>
-                                    <StyledText>{player.name}</StyledText>
+                                    <StyledText>
+                                        {player.name} - Eliminated
+                                    </StyledText>
                                     <LettersDisplay
                                         letters={letters}
                                         totalPoints={player.points}
