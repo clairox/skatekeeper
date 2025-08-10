@@ -56,9 +56,14 @@ const getRecords = async (): Promise<HistoryRecord[]> => {
     return await getStoredHistory()
 }
 
+const clearHistory = async (): Promise<void> => {
+    await setStoredHistory([])
+}
+
 export default {
     getRecord,
     newRecord,
     saveRecord,
     getRecords,
+    clearHistory,
 }

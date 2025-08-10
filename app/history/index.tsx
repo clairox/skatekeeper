@@ -17,15 +17,20 @@ const HistoryPage = () => {
         return records
     }, [records, hideIncomplete])
 
-    const toggleHideIncomplete = () => {
+    const toggleHideIncomplete = (): void => {
         setHideIncomplete(prev => !prev)
     }
 
-    useEffect(() => {
-        const fetchRecords = async () => {
-            setRecords(await history.getRecords())
-        }
+    const clearHistory = async (): Promise<void> => {
+        await history.clearHistory()
+        fetchRecords()
+    }
 
+    const fetchRecords = async () => {
+        setRecords(await history.getRecords())
+    }
+
+    useEffect(() => {
         fetchRecords()
     }, [])
 
@@ -39,6 +44,10 @@ const HistoryPage = () => {
                                 ? 'Show Incomplete'
                                 : 'Hide Incomplete',
                             onPress: toggleHideIncomplete,
+                        },
+                        {
+                            title: 'Clear History',
+                            onPress: clearHistory,
                         },
                     ]}
                 />
@@ -71,7 +80,26 @@ const HistoryPage = () => {
         )
     }
 
-    return <StyledText>Nothing here</StyledText>
+    return (
+        <View style={styles.container}>
+            {' '}
+            <OverflowMenu
+                options={[
+                    {
+                        title: hideIncomplete
+                            ? 'Show Incomplete'
+                            : 'Hide Incomplete',
+                        onPress: toggleHideIncomplete,
+                    },
+                    {
+                        title: 'Clear History',
+                        onPress: clearHistory,
+                    },
+                ]}
+            />
+            <StyledText>Nothing here</StyledText>
+        </View>
+    )
 }
 
 export default HistoryPage

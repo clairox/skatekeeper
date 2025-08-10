@@ -14,7 +14,7 @@
     - [ ] Continue unfinished game
     - [ ] Delay history record initialization until play phase
     - [ ] Delete individual history records
-    - [ ] Clear history
+    - [x] Clear history
 
 ### Done
 
