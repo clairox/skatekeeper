@@ -1,0 +1,99 @@
+import { useLocalSearchParams } from 'expo-router'
+import { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, ScrollView, FlatList } from 'react-native'
+import history from '../../../lib/history'
+import StyledText from '../../../components/ui/StyledText'
+import LettersDisplay from '../../../components/ui/LettersDisplay'
+
+const GameHistoryRecordRecap = () => {
+    const { id } = useLocalSearchParams() as { id: string }
+
+    const [rounds, setRounds] = useState<GameRecordRound[]>([])
+    const [letters, setLetters] = useState('')
+
+    useEffect(() => {
+        const fetchRounds = async () => {
+            try {
+                const result = await history.getRecord(parseInt(id))
+                if (!result) {
+                    throw new Error(`Record with id ${id} does not exist.`)
+                }
+
+                setRounds(result.data.rounds)
+                setLetters(result.data.letters!)
+            } catch (err) {
+                throw new Error(`An unexpected error has occurred: ${err}`)
+            }
+        }
+
+        fetchRounds()
+    }, [id])
+
+    return (
+        <View style={styles.container}>
+            <FlatList
+                data={rounds}
+                keyExtractor={(item, index) =>
+                    index.toString() + (item.trick ?? 'inc')
+                }
+                renderItem={({ item: round, index }) => (
+                    <View style={styles.roundContainer}>
+                        <StyledText
+                            style={styles.roundHeader}
+                        >{`${index + 1}: ${Boolean(round.trick && round.completed) ? round.trick : 'Incomplete'}`}</StyledText>
+                        {round.setterId != null && (
+                            <StyledText>
+                                Setter:{' '}
+                                {
+                                    round.activePlayers.find(
+                                        player => player.id === round.setterId
+                                    )!.name
+                                }
+                            </StyledText>
+                        )}
+                        {round.activePlayers.map((player, idx) => {
+                            return (
+                                <View key={idx + player.id}>
+                                    <StyledText>{player.name}</StyledText>
+                                    <LettersDisplay
+                                        letters={letters}
+                                        totalPoints={player.points}
+                                    />
+                                </View>
+                            )
+                        })}
+                        {round.eliminatedPlayers.map((player, idx) => {
+                            return (
+                                <View key={idx + player.id}>
+                                    <StyledText>{player.name}</StyledText>
+                                    <LettersDisplay
+                                        letters={letters}
+                                        totalPoints={player.points}
+                                    />
+                                </View>
+                            )
+                        })}
+                    </View>
+                )}
+            ></FlatList>
+        </View>
+    )
+}
+
+export default GameHistoryRecordRecap
+
+const styles = StyleSheet.create({
+    container: {
+        marginBottom: 80,
+    },
+    roundContainer: {
+        justifyContent: 'flex-start',
+        borderBottomWidth: 1,
+        textAlign: 'left',
+    },
+    roundHeader: {
+        fontSize: 26,
+        textAlign: 'left',
+        textDecorationLine: 'underline',
+    },
+})
