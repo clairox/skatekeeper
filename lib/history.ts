@@ -56,6 +56,11 @@ const getRecords = async (): Promise<HistoryRecord[]> => {
     return await getStoredHistory()
 }
 
+const deleteRecord = async (id: number): Promise<void> => {
+    const history = await getStoredHistory()
+    await setStoredHistory(history.filter(record => record.id !== id))
+}
+
 const deleteIncompleteRecords = async (): Promise<void> => {
     const history = await getStoredHistory()
     await setStoredHistory(history.filter(record => record.completed))
@@ -70,6 +75,7 @@ export default {
     newRecord,
     saveRecord,
     getRecords,
+    deleteRecord,
     deleteIncompleteRecords,
     clearHistory,
 }
