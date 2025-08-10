@@ -26,7 +26,10 @@ const GameOverPhase = () => {
     }
 
     const playAgain = () => {
-        router.replace(`./setup?key=${Date.now().toString()}`)
+        router.replace({
+            pathname: './setup',
+            params: { instance: Date.now().toString() },
+        })
     }
 
     return (
