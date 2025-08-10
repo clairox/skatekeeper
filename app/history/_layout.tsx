@@ -1,12 +1,11 @@
-import { StyleSheet } from 'react-native'
-import MultiPlatformSafeAreaView from '../../components/MultiPlatformSafeAreaView'
+import { StyleSheet, View } from 'react-native'
 import { Slot } from 'expo-router'
 
 const HistoryLayout = () => {
     return (
-        <MultiPlatformSafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <Slot />
-        </MultiPlatformSafeAreaView>
+        </View>
     )
 }
 

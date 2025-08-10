@@ -1,7 +1,8 @@
-import { Button, View } from 'react-native'
+import { View } from 'react-native'
 import { useEffect, useState } from 'react'
 import StyledText from '../ui/StyledText'
 import StyledView from '../ui/StyledView'
+import { MenuTextButton } from '../ui/MenuButton'
 
 type InitLettersStepProps = {
     setLetters: (newLetters: string) => void
@@ -26,17 +27,22 @@ const InitLettersStep: React.FC<InitLettersStepProps> = ({
     }
 
     return (
-        <StyledView>
+        <StyledView style={{ gap: 20 }}>
             <StyledText>Choose a game mode</StyledText>
             <View
                 style={{
                     flexDirection: 'row',
-                    justifyContent: 'center',
+                    justifyContent: 'space-between',
                     gap: 50,
+                    width: '70%',
                 }}
             >
-                <Button title="SKATE" onPress={() => initLetters('SKATE')} />
-                <Button title="SK8" onPress={() => initLetters('SK8')} />
+                <MenuTextButton onPress={() => initLetters('SKATE')}>
+                    SKATE
+                </MenuTextButton>
+                <MenuTextButton onPress={() => initLetters('SK8')}>
+                    SK8
+                </MenuTextButton>
             </View>
         </StyledView>
     )

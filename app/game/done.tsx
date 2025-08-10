@@ -1,9 +1,10 @@
-import { Button } from 'react-native'
-import LettersDisplay from '../../components/LettersDisplay'
+import { View } from 'react-native'
+import LettersDisplay from '../../components/ui/LettersDisplay'
 import { useRouter } from 'expo-router'
 import { useLetters, usePlayers, useWinnerId } from '../../context/GameContext'
 import StyledView from '../../components/ui/StyledView'
 import StyledText from '../../components/ui/StyledText'
+import { MenuTextButton } from '../../components/ui/MenuButton'
 
 const GameOverPhase = () => {
     const router = useRouter()
@@ -32,8 +33,12 @@ const GameOverPhase = () => {
         <StyledView>
             <StyledText>{winner.name} is the winner!</StyledText>
             <LettersDisplay letters={letters} totalPoints={winner.points} />
-            <Button title="Play again" onPress={playAgain} />
-            <Button title="Home" onPress={() => router.dismissTo('/')} />
+            <View style={{ gap: 20 }}>
+                <MenuTextButton onPress={playAgain}>Play again</MenuTextButton>
+                <MenuTextButton onPress={() => router.dismissTo('/')}>
+                    Home
+                </MenuTextButton>
+            </View>
         </StyledView>
     )
 }

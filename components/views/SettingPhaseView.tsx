@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { useGameActions } from '../../context/GameContext'
-import { BackHandler, Button, StyleSheet, TextInput, View } from 'react-native'
-import LettersDisplay from '../LettersDisplay'
+import { BackHandler, StyleSheet, TextInput, View } from 'react-native'
+import LettersDisplay from '../ui/LettersDisplay'
 import StyledText from '../ui/StyledText'
 import StyledView from '../ui/StyledView'
+import { MenuTextButton } from '../ui/MenuButton'
 
 type SettingPhaseProps = {
     letters: string
@@ -54,11 +55,12 @@ const ActionRow: React.FC<ActionRowProps> = ({ onSetSuccess, onSetFailed }) => {
 
     const actionButtonRow = useRef(
         <View style={[styles.actionRow, styles.actionButtonRow]}>
-            <Button title="Missed" onPress={onSetFailed} />
-            <Button
-                title="Landed"
+            <MenuTextButton onPress={onSetFailed}>Missed</MenuTextButton>
+            <MenuTextButton
                 onPress={() => setActionRow(actionInputRow.current)}
-            />
+            >
+                Landed
+            </MenuTextButton>
         </View>
     )
 
@@ -112,7 +114,7 @@ const ActionInputRow: React.FC<ActionInputRowProps> = ({
                 autoFocus
                 style={styles.trickInput}
             />
-            <Button title="x" onPress={close} />
+            <MenuTextButton onPress={close}>x</MenuTextButton>
         </View>
     )
 }
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     trickInput: {
-        width: '100%',
+        width: '80%',
         borderWidth: 1,
     },
 })

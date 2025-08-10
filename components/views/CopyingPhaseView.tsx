@@ -1,8 +1,9 @@
-import { Button, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useGameActions } from '../../context/GameContext'
-import LettersDisplay from '../LettersDisplay'
+import LettersDisplay from '../ui/LettersDisplay'
 import StyledText from '../ui/StyledText'
 import StyledView from '../ui/StyledView'
+import { MenuTextButton } from '../ui/MenuButton'
 
 type CopyingPhaseViewProps = {
     letters: string
@@ -42,8 +43,8 @@ const CopyingPhaseView: React.FC<CopyingPhaseViewProps> = ({
                 totalPoints={currentPlayer.points}
             />
             <View style={[styles.actionRow, styles.actionButtonRow]}>
-                <Button title="Missed" onPress={onCopyFailure} />
-                <Button title="Landed" onPress={onCopySuccess} />
+                <MenuTextButton onPress={onCopyFailure}>Missed</MenuTextButton>
+                <MenuTextButton onPress={onCopySuccess}>Landed</MenuTextButton>
             </View>
         </StyledView>
     )

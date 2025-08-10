@@ -1,8 +1,9 @@
-import { Button, View } from 'react-native'
-import PlayerInput from '../PlayerInput'
+import { View } from 'react-native'
+import PlayerInput from '../ui/PlayerInput'
 import { useEffect, useState } from 'react'
 import StyledText from '../ui/StyledText'
 import StyledView from '../ui/StyledView'
+import { MenuTextButton } from '../ui/MenuButton'
 
 type AddPlayersStepProps = {
     players: Player[]
@@ -54,7 +55,9 @@ const AddPlayersStep: React.FC<AddPlayersStepProps> = ({
                     onPlayerAdded={addPlayer}
                 />
             </View>
-            <Button title="Done" disabled={players.length < 2} onPress={next} />
+            <MenuTextButton disabled={players.length < 2} onPress={next}>
+                Done
+            </MenuTextButton>
         </StyledView>
     )
 }

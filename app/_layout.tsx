@@ -1,4 +1,4 @@
-import MultiPlatformSafeAreaView from '../components/MultiPlatformSafeAreaView'
+import MultiPlatformSafeAreaView from '../components/ui/MultiPlatformSafeAreaView'
 import { Slot, SplashScreen } from 'expo-router'
 import {
     SpaceGrotesk_400Regular,

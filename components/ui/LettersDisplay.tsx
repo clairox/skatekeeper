@@ -1,5 +1,5 @@
 import { StyleProp, StyleSheet, TextStyle, View } from 'react-native'
-import StyledText from './ui/StyledText'
+import StyledText from './StyledText'
 
 type LettersDisplayProps = {
     letters: string
