@@ -5,8 +5,8 @@ import { Link } from 'expo-router'
 import StyledText from '../../components/ui/StyledText'
 import { formatDate } from '../../utils/helpers'
 
-const GameHistory = () => {
-    const [records, setRecords] = useState<GameRecord[]>([])
+const HistoryPage = () => {
+    const [records, setRecords] = useState<HistoryRecord[]>([])
     const [hideIncomplete, setHideIncomplete] = useState(true)
     const filteredRecords = useMemo(() => {
         if (hideIncomplete) {
@@ -69,7 +69,7 @@ const GameHistory = () => {
     return <StyledText>Nothing here</StyledText>
 }
 
-export default GameHistory
+export default HistoryPage
 
 const styles = StyleSheet.create({
     container: {

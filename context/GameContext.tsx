@@ -1,14 +1,14 @@
 import { createContext, PropsWithChildren, useContext, useRef } from 'react'
 import { createGameStore, GameState } from '../store'
 import { StoreApi, useStore } from 'zustand'
-import { useGameRecordHandlerContext } from './GameRecordHandlerContext'
+import { useHistoryRecordContext } from './HistoryRecordContext'
 
 type GameStore = StoreApi<GameState>
 const GameContext = createContext<GameStore>({} as GameStore)
 
 type GameProviderProps = PropsWithChildren
 export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
-    const recordHandler = useGameRecordHandlerContext()
+    const recordHandler = useHistoryRecordContext()
     const storeRef = useRef<GameStore>({} as GameStore)
     if (Object.keys(storeRef.current).length === 0) {
         storeRef.current = createGameStore(recordHandler)

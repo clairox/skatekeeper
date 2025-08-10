@@ -21,35 +21,40 @@ type StepProps = {
     next: () => void
 }
 
-type GameRecordRoundPlayer = Player & {
-    copied?: boolean
-}
-
-type GameRecordRound = {
-    trick?: string
-    setterId?: number
-    activePlayers: GameRecordRoundPlayer[]
-    eliminatedPlayers: Player[]
-    completed: boolean
-}
-
-type GameRecordData = {
-    letters?: string
-    players: Player[]
-    turn: number
-    winnerId?: number
-    rounds: GameRecordRound[]
-}
-
-type GameRecord = {
+type HistoryRecord = {
     id: number
     completed: boolean
-    data: GameRecordData
+    data: HistoryData
     createdAt: Date
     completedAt: Date | null
 }
 
-type UpdateGameRecord = {
+type HistoryData = {
+    letters?: string
+    players: Player[]
+    turn: number
+    winnerId?: number
+    rounds: HistoryRound[]
+}
+
+type HistoryRound = {
+    trick?: string
+    setterId?: number
+    activePlayers: HistoryActivePlayer[]
+    eliminatedPlayers: Player[]
+    completed: boolean
+}
+
+type HistoryActivePlayer = Player & {
+    copied?: boolean
+}
+
+type HistoryRecordHandler = {
+    init: (letters: string, players: Player[]) => Promise<void>
+    update: (data: UpdateHistoryValues) => Promise<void>
+}
+
+type UpdateHistoryValues = {
     playerId: number
     type: 'set' | 'copy'
     status: 'success' | 'failed'
@@ -60,9 +65,4 @@ type UpdateGameRecord = {
     playerEliminated?: boolean
     winnerId?: number
     roundOver?: boolean
-}
-
-type GameRecordHandler = {
-    init: (letters: string, players: Player[]) => Promise<void>
-    update: (data: UpdateGameRecord) => Promise<void>
 }

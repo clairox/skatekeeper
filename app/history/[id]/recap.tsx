@@ -1,14 +1,14 @@
 import { useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, ScrollView, FlatList } from 'react-native'
+import { View, StyleSheet, FlatList } from 'react-native'
 import history from '../../../lib/history'
 import StyledText from '../../../components/ui/StyledText'
 import LettersDisplay from '../../../components/ui/LettersDisplay'
 
-const GameHistoryRecordRecap = () => {
+const HistoryEntryRecapPage = () => {
     const { id } = useLocalSearchParams() as { id: string }
 
-    const [rounds, setRounds] = useState<GameRecordRound[]>([])
+    const [rounds, setRounds] = useState<HistoryRound[]>([])
     const [letters, setLetters] = useState('')
 
     useEffect(() => {
@@ -80,7 +80,7 @@ const GameHistoryRecordRecap = () => {
     )
 }
 
-export default GameHistoryRecordRecap
+export default HistoryEntryRecapPage
 
 const styles = StyleSheet.create({
     container: {

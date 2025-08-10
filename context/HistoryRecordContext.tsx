@@ -7,40 +7,41 @@ import {
 } from 'react'
 import history from '../lib/history'
 
-const GameRecordHandlerContext = createContext<GameRecordHandler>(
-    {} as GameRecordHandler
+const HistoryRecordContext = createContext<HistoryRecordHandler>(
+    {} as HistoryRecordHandler
 )
 
-type GameRecordHandlerProviderProps = PropsWithChildren<{
-    historyId?: number
+type HistoryRecordProviderProps = PropsWithChildren<{
+    recordId?: number
 }>
 
-export const GameRecordHandlerProvider: React.FC<
-    GameRecordHandlerProviderProps
-> = ({ children, historyId }) => {
-    const gameRecord = useRef<GameRecord>({} as GameRecord)
+export const HistoryRecordProvider: React.FC<HistoryRecordProviderProps> = ({
+    children,
+    recordId,
+}) => {
+    const record = useRef<HistoryRecord>({} as HistoryRecord)
 
     useEffect(() => {
         const init = async () => {
-            const result = await (historyId
-                ? (history.getRecord(historyId) ?? history.newRecord())
+            const result = await (recordId
+                ? (history.getRecord(recordId) ?? history.newRecord())
                 : history.newRecord())
 
-            gameRecord.current = result!
+            record.current = result!
         }
 
         init()
         console.log('Initializing record...')
-    }, [historyId])
+    }, [recordId])
 
     const saveHistory = async (): Promise<void> => {
-        const idx = await (historyId ??
+        const idx = await (recordId ??
             history.getRecords().then(records => records.length - 1))
-        history.saveRecord(idx, gameRecord.current)
+        history.saveRecord(idx, record.current)
     }
 
-    const initRound = (): GameRecordRound => {
-        const prevRecord = gameRecord.current
+    const initRound = (): HistoryRound => {
+        const prevRecord = record.current
         const activePlayers = prevRecord.data.players.filter(
             player => !player.isEliminated
         )
@@ -57,38 +58,35 @@ export const GameRecordHandlerProvider: React.FC<
         }
     }
 
-    const getCurrentRound = (): { data: GameRecordRound; idx: number } => {
-        const roundCount = gameRecord.current.data.rounds.length
+    const getCurrentRound = (): { data: HistoryRound; idx: number } => {
+        const roundCount = record.current.data.rounds.length
         return {
-            data: gameRecord.current.data.rounds[roundCount - 1],
+            data: record.current.data.rounds[roundCount - 1],
             idx: roundCount - 1,
         }
     }
 
-    const setGameRecord = (data: Partial<GameRecord>): void => {
-        gameRecord.current = { ...gameRecord.current, ...data }
+    const setRecord = (data: Partial<HistoryRecord>): void => {
+        record.current = { ...record.current, ...data }
     }
 
-    const setGameRecordData = (data: Partial<GameRecordData>): void => {
-        gameRecord.current.data = { ...gameRecord.current.data, ...data }
+    const setRecordData = (data: Partial<HistoryData>): void => {
+        record.current.data = { ...record.current.data, ...data }
     }
 
-    const setGameRecordRound = (
-        idx: number,
-        data: Partial<GameRecordRound>
-    ): void => {
-        const prevRound = gameRecord.current.data.rounds[idx]
-        gameRecord.current.data.rounds[idx] = { ...prevRound, ...data }
+    const setRecordRound = (idx: number, data: Partial<HistoryRound>): void => {
+        const prevRound = record.current.data.rounds[idx]
+        record.current.data.rounds[idx] = { ...prevRound, ...data }
     }
 
     const init = async (letters: string, players: Player[]): Promise<void> => {
-        setGameRecordData({ letters, players, turn: 0, rounds: [] })
-        const rounds = [...gameRecord.current.data.rounds, initRound()]
-        setGameRecordData({ rounds })
+        setRecordData({ letters, players, turn: 0, rounds: [] })
+        const rounds = [...record.current.data.rounds, initRound()]
+        setRecordData({ rounds })
         await saveHistory()
     }
 
-    const update = async (data: UpdateGameRecord): Promise<void> => {
+    const update = async (data: UpdateHistoryValues): Promise<void> => {
         const { data: currentRound, idx } = getCurrentRound()
 
         const {
@@ -103,15 +101,15 @@ export const GameRecordHandlerProvider: React.FC<
             roundOver,
         } = data
 
-        setGameRecordData({ turn: nextTurn })
+        setRecordData({ turn: nextTurn })
 
         switch (`${type},${status}`) {
             case 'set,success':
-                setGameRecordRound(idx, { trick })
+                setRecordRound(idx, { trick })
                 break
             case 'set,failed':
                 const setterId = currentRound.activePlayers[nextTurn].id
-                setGameRecordRound(idx, { setterId })
+                setRecordRound(idx, { setterId })
                 break
             case 'copy,success':
                 break
@@ -122,14 +120,14 @@ export const GameRecordHandlerProvider: React.FC<
                     )
                 }
 
-                setGameRecordData({ players })
-                setGameRecordRound(idx, { activePlayers })
+                setRecordData({ players })
+                setRecordRound(idx, { activePlayers })
 
                 if (playerEliminated) {
                     const eliminatedPlayers = players.filter(
                         player => player.isEliminated
                     )
-                    setGameRecordRound(idx, { eliminatedPlayers })
+                    setRecordRound(idx, { eliminatedPlayers })
                 }
                 break
             default:
@@ -139,18 +137,18 @@ export const GameRecordHandlerProvider: React.FC<
         }
 
         if (roundOver) {
-            setGameRecordRound(idx, { completed: true })
+            setRecordRound(idx, { completed: true })
 
             const gameOver = winnerId != null
             if (!gameOver) {
-                const rounds = [...gameRecord.current.data.rounds, initRound()]
-                setGameRecordData({ rounds })
+                const rounds = [...record.current.data.rounds, initRound()]
+                setRecordData({ rounds })
             }
         }
 
         if (winnerId != null) {
-            setGameRecordData({ winnerId })
-            setGameRecord({ completed: true, completedAt: new Date() })
+            setRecordData({ winnerId })
+            setRecord({ completed: true, completedAt: new Date() })
         }
 
         await saveHistory()
@@ -159,16 +157,16 @@ export const GameRecordHandlerProvider: React.FC<
     const value = { init, update }
 
     return (
-        <GameRecordHandlerContext.Provider value={value}>
+        <HistoryRecordContext.Provider value={value}>
             {children}
-        </GameRecordHandlerContext.Provider>
+        </HistoryRecordContext.Provider>
     )
 }
 
-export const useGameRecordHandlerContext = () => {
-    const ctx = useContext(GameRecordHandlerContext)
+export const useHistoryRecordContext = () => {
+    const ctx = useContext(HistoryRecordContext)
     if (!ctx) {
-        throw new Error('Missing GameRecordHandlerContext')
+        throw new Error('Missing HistoryRecordContext')
     }
 
     return ctx

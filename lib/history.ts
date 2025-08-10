@@ -11,7 +11,7 @@ const getStoredHistory = async () => {
     return []
 }
 
-const setStoredHistory = async (value: GameRecord[]) => {
+const setStoredHistory = async (value: HistoryRecord[]) => {
     try {
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(value))
     } catch (error) {
@@ -19,13 +19,13 @@ const setStoredHistory = async (value: GameRecord[]) => {
     }
 }
 
-const getRecord = async (id: number): Promise<GameRecord | undefined> => {
-    const history = (await getStoredHistory()) as GameRecord[]
+const getRecord = async (id: number): Promise<HistoryRecord | undefined> => {
+    const history = (await getStoredHistory()) as HistoryRecord[]
     return history.find(record => record.id === id)
 }
 
-const newRecord = async (): Promise<GameRecord> => {
-    const history = (await getStoredHistory()) as GameRecord[]
+const newRecord = async (): Promise<HistoryRecord> => {
+    const history = (await getStoredHistory()) as HistoryRecord[]
     history.push({
         id: history.length,
         completed: false,
@@ -43,13 +43,16 @@ const newRecord = async (): Promise<GameRecord> => {
     return history[recordCount - 1]
 }
 
-const saveRecord = async (idx: number, record: GameRecord): Promise<void> => {
+const saveRecord = async (
+    idx: number,
+    record: HistoryRecord
+): Promise<void> => {
     const history = await getStoredHistory()
     history[idx] = record
     await setStoredHistory(history)
 }
 
-const getRecords = async (): Promise<GameRecord[]> => {
+const getRecords = async (): Promise<HistoryRecord[]> => {
     return await getStoredHistory()
 }
 

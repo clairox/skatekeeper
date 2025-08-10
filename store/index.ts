@@ -19,7 +19,7 @@ type GameStateActions = {
     onPlayerCopyFailure: () => Promise<void>
 }
 
-export const createGameStore = (recordHandler: GameRecordHandler) => {
+export const createGameStore = (recordHandler: HistoryRecordHandler) => {
     const getNextTurn = (currentTurn: number, activePlayers: Player[]) => {
         if (currentTurn + 1 >= activePlayers.length) {
             return 0

@@ -5,10 +5,10 @@ import { FlatList, View } from 'react-native'
 import StyledText from '../../../components/ui/StyledText'
 import { formatDate } from '../../../utils/helpers'
 
-const GameHistoryRecord = () => {
+const HistoryEntryPage = () => {
     const { id } = useLocalSearchParams() as { id: string }
 
-    const [record, setRecord] = useState<GameRecord | null>(null)
+    const [record, setRecord] = useState<HistoryRecord | null>(null)
 
     useEffect(() => {
         const fetchRecord = async () => {
@@ -65,4 +65,4 @@ const GameHistoryRecord = () => {
     return <View></View>
 }
 
-export default GameHistoryRecord
+export default HistoryEntryPage

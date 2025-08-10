@@ -1,6 +1,6 @@
 import { Slot } from 'expo-router'
 import { GameProvider } from '../../context/GameContext'
-import { GameRecordHandlerProvider } from '../../context/GameRecordHandlerContext'
+import { HistoryRecordProvider } from '../../context/HistoryRecordContext'
 import { useGlobalSearchParams, useRouter } from 'expo-router/build/hooks'
 import { useEffect, useState } from 'react'
 import { BackHandler } from 'react-native'
@@ -35,11 +35,11 @@ const GameLayout = () => {
     }, [key])
 
     return (
-        <GameRecordHandlerProvider key={key}>
+        <HistoryRecordProvider key={key}>
             <GameProvider>
                 <Slot />
             </GameProvider>
-        </GameRecordHandlerProvider>
+        </HistoryRecordProvider>
     )
 }
 
