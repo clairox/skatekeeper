@@ -3,14 +3,7 @@ import history from '../../lib/history'
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'expo-router'
 import StyledText from '../../components/ui/StyledText'
-
-const localStringOptions: Intl.DateTimeFormatOptions = {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-}
+import { formatDate } from '../../utils/helpers'
 
 const GameHistory = () => {
     const [records, setRecords] = useState<GameRecord[]>([])
@@ -46,9 +39,9 @@ const GameHistory = () => {
                 />
                 <FlatList
                     data={filteredRecords.map(record => {
-                        const dateTimeString = new Date(
-                            record.createdAt
-                        ).toLocaleString('en-US', localStringOptions)
+                        const dateTimeString = formatDate(
+                            new Date(record.createdAt)
+                        )
                         return {
                             id: record.id,
                             title: `${dateTimeString}${record.completed ? '' : ' - Incomplete'}`,
@@ -56,7 +49,7 @@ const GameHistory = () => {
                     })}
                     renderItem={({ item }) => {
                         return (
-                            <Link href={`./${item.id}`}>
+                            <Link href={`./history/${item.id}`}>
                                 <View style={{ height: 40 }}>
                                     <StyledText style={styles.text}>
                                         {item.title}
