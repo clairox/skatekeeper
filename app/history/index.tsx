@@ -21,6 +21,11 @@ const HistoryPage = () => {
         setHideIncomplete(prev => !prev)
     }
 
+    const deleteIncompleteRecords = async (): Promise<void> => {
+        await history.deleteIncompleteRecords()
+        fetchRecords()
+    }
+
     const clearHistory = async (): Promise<void> => {
         await history.clearHistory()
         fetchRecords()
@@ -41,12 +46,16 @@ const HistoryPage = () => {
                     options={[
                         {
                             title: hideIncomplete
-                                ? 'Show Incomplete'
-                                : 'Hide Incomplete',
+                                ? 'Show incomplete'
+                                : 'Hide incomplete',
                             onPress: toggleHideIncomplete,
                         },
                         {
-                            title: 'Clear History',
+                            title: 'Delete all incomplete',
+                            onPress: deleteIncompleteRecords,
+                        },
+                        {
+                            title: 'Clear history',
                             onPress: clearHistory,
                         },
                     ]}

@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const STORAGE_KEY = '@skatekeeper:history'
 
-const getStoredHistory = async () => {
+const getStoredHistory = async (): Promise<HistoryRecord[]> => {
     const value = await AsyncStorage.getItem(STORAGE_KEY)
     if (value) {
         return JSON.parse(value)
@@ -56,6 +56,11 @@ const getRecords = async (): Promise<HistoryRecord[]> => {
     return await getStoredHistory()
 }
 
+const deleteIncompleteRecords = async (): Promise<void> => {
+    const history = await getStoredHistory()
+    await setStoredHistory(history.filter(record => record.completed))
+}
+
 const clearHistory = async (): Promise<void> => {
     await setStoredHistory([])
 }
@@ -65,5 +70,6 @@ export default {
     newRecord,
     saveRecord,
     getRecords,
+    deleteIncompleteRecords,
     clearHistory,
 }
