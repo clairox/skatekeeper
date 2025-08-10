@@ -43,5 +43,6 @@ export { MenuTextButton, MenuImageButton }
 const styles = StyleSheet.create({
     menuButtonText: {
         fontSize: 28,
+        textAlign: 'center',
     },
 })
