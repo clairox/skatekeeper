@@ -12,7 +12,7 @@
 
 - [ ] Game history
     - [ ] Continue unfinished game
-    - [ ] Delay history record initialization until play phase
+    - [x] Delay history record initialization until play phase
     - [x] Delete individual history records
     - [x] Clear incomplete
     - [x] Clear history
