@@ -1,9 +1,10 @@
-import { Button, FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import history from '../../lib/history'
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'expo-router'
 import StyledText from '../../components/ui/StyledText'
 import { formatDate } from '../../utils/helpers'
+import OverflowMenu from '../../components/ui/OverflowMenu'
 
 const HistoryPage = () => {
     const [records, setRecords] = useState<HistoryRecord[]>([])
@@ -31,11 +32,15 @@ const HistoryPage = () => {
     if (records.length > 0) {
         return (
             <View style={styles.container}>
-                <Button
-                    title={
-                        hideIncomplete ? 'Show Incomplete' : 'Hide Incomplete'
-                    }
-                    onPress={toggleHideIncomplete}
+                <OverflowMenu
+                    options={[
+                        {
+                            title: hideIncomplete
+                                ? 'Show Incomplete'
+                                : 'Hide Incomplete',
+                            onPress: toggleHideIncomplete,
+                        },
+                    ]}
                 />
                 <FlatList
                     data={filteredRecords.map(record => {
