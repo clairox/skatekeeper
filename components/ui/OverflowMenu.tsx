@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Modal, Pressable } from 'react-native'
+import { Button, Modal, Pressable, View } from 'react-native'
 import StyledText from './StyledText'
 
 type OverflowMenuProps = {
@@ -16,19 +16,26 @@ const OverflowMenu: React.FC<OverflowMenuProps> = ({ options }) => {
         <>
             <Button title="Menu" onPress={toggleMenu} />
             <Modal onRequestClose={() => setVisible(false)} visible={visible}>
-                {options.map((option, idx) => {
-                    return (
-                        <Pressable
-                            onPress={() => {
-                                option.onPress()
-                                setVisible(false)
-                            }}
-                            key={idx + option.title}
-                        >
-                            <StyledText>{option.title}</StyledText>
-                        </Pressable>
-                    )
-                })}
+                <View style={{ paddingTop: 10 }}>
+                    {options.map((option, idx) => {
+                        return (
+                            <Pressable
+                                onPress={() => {
+                                    option.onPress()
+                                    setVisible(false)
+                                }}
+                                key={idx + option.title}
+                                style={{
+                                    justifyContent: 'center',
+                                    paddingLeft: 20,
+                                    height: 40,
+                                }}
+                            >
+                                <StyledText>{option.title}</StyledText>
+                            </Pressable>
+                        )
+                    })}
+                </View>
             </Modal>
         </>
     )
