@@ -12,6 +12,5 @@ const styles = StyleSheet.create({
     text: {
         fontFamily: 'SpaceGrotesk_500Medium',
         fontSize: 18,
-        textAlign: 'center',
     },
 })
