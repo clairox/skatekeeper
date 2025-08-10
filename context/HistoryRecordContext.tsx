@@ -22,7 +22,7 @@ export const HistoryRecordProvider: React.FC<HistoryRecordProviderProps> = ({
     const record = useRef<HistoryRecord>({} as HistoryRecord)
 
     useEffect(() => {
-        const init = async () => {
+        const fetchRecord = async () => {
             const result = await (recordId
                 ? (history.getRecord(recordId) ?? history.newRecord())
                 : history.newRecord())
@@ -30,7 +30,7 @@ export const HistoryRecordProvider: React.FC<HistoryRecordProviderProps> = ({
             record.current = result!
         }
 
-        init()
+        fetchRecord()
         console.log('Initializing record...')
     }, [recordId])
 
