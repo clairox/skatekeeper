@@ -10,6 +10,10 @@
 
 ### In Progress
 
+- [ ] Game
+    - [ ] Refactor /game subroutes into a single consolidated endpoint
+    - [ ] Move history management from context into custom hook
+    - [ ] Relocate game state logic to /game root component
 - [ ] Game history
     - [ ] Continue unfinished game
     - [x] Delay history record initialization until play phase
