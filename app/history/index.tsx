@@ -2,7 +2,7 @@ import { FlatList, StyleSheet, View } from 'react-native'
 import history from '../../lib/history'
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'expo-router'
-import StyledText from '../../components/ui/StyledText'
+import Text from '../../components/ui/Text'
 import { formatDate } from '../../utils/helpers'
 import OverflowMenu from '../../components/ui/OverflowMenu'
 
@@ -74,9 +74,9 @@ const HistoryPage = () => {
                         return (
                             <Link href={`./history/${item.id}`}>
                                 <View style={{ height: 40 }}>
-                                    <StyledText style={styles.text}>
+                                    <Text style={styles.text}>
                                         {item.title}
-                                    </StyledText>
+                                    </Text>
                                 </View>
                             </Link>
                         )
@@ -105,7 +105,7 @@ const HistoryPage = () => {
                     },
                 ]}
             />
-            <StyledText>Nothing here</StyledText>
+            <Text>Nothing here</Text>
         </View>
     )
 }

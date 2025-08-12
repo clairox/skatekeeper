@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { useGameContext } from '../../context/GameContext'
 import LettersDisplay from '../ui/LettersDisplay'
-import StyledText from '../ui/StyledText'
+import Text from '../ui/Text'
 import StyledView from '../ui/StyledView'
 import { MenuTextButton } from '../ui/MenuButton'
 
@@ -14,8 +14,8 @@ const TrickCopyView = () => {
 
     return (
         <StyledView>
-            <StyledText>Trick to copy: {currentTrick}</StyledText>
-            <StyledText>{`${currentPlayer.name} it's your turn!`}</StyledText>
+            <Text>Trick to copy: {currentTrick}</Text>
+            <Text>{`${currentPlayer.name} it's your turn!`}</Text>
             <LettersDisplay
                 letters={letters}
                 totalPoints={currentPlayer.points}

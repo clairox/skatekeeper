@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import StyledText from '../ui/StyledText'
+import Text from '../ui/Text'
 import StyledView from '../ui/StyledView'
 import PlayerInput from '../ui/PlayerInput'
 import { MenuTextButton } from '../ui/MenuButton'
@@ -17,7 +17,7 @@ const PlayersSetup: React.FC<PlayersSetupProps> = ({
 }) => {
     return (
         <StyledView>
-            <StyledText>{"Who's playing?"}</StyledText>
+            <Text>{"Who's playing?"}</Text>
             <View style={{ gap: 10, paddingHorizontal: 30, width: '100%' }}>
                 {players.map((player, idx) => (
                     <View
@@ -28,9 +28,7 @@ const PlayersSetup: React.FC<PlayersSetupProps> = ({
                             height: 30,
                         }}
                     >
-                        <StyledText style={{ fontSize: 20 }}>
-                            {player.name}
-                        </StyledText>
+                        <Text style={{ fontSize: 20 }}>{player.name}</Text>
                     </View>
                 ))}
                 <PlayerInput

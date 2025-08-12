@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useGameContext } from '../../context/GameContext'
 import LettersDisplay from '../ui/LettersDisplay'
-import StyledText from '../ui/StyledText'
+import Text from '../ui/Text'
 import StyledView from '../ui/StyledView'
 import { StyleSheet, View } from 'react-native'
 import { MenuTextButton } from '../ui/MenuButton'
@@ -18,7 +18,7 @@ const TrickSetView = () => {
 
     return (
         <StyledView>
-            <StyledText>{currentPlayer.name} sets the trick!</StyledText>
+            <Text>{currentPlayer.name} sets the trick!</Text>
             <LettersDisplay
                 letters={letters}
                 totalPoints={currentPlayer.points}

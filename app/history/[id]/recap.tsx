@@ -2,7 +2,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { View, StyleSheet, FlatList, Button } from 'react-native'
 import history from '../../../lib/history'
-import StyledText from '../../../components/ui/StyledText'
+import Text from '../../../components/ui/Text'
 import LettersDisplay from '../../../components/ui/LettersDisplay'
 
 const HistoryEntryRecapPage = () => {
@@ -40,9 +40,9 @@ const HistoryEntryRecapPage = () => {
                 renderItem={({ item: round, index }) => (
                     <View style={styles.roundContainer}>
                         <View style={styles.roundHeader}>
-                            <StyledText
+                            <Text
                                 style={styles.roundHeaderText}
-                            >{`${index + 1}: ${Boolean(round.trick && round.completed) ? round.trick : 'Incomplete'}`}</StyledText>
+                            >{`${index + 1}: ${Boolean(round.trick && round.completed) ? round.trick : 'Incomplete'}`}</Text>
                             {!round.completed && (
                                 <Button
                                     title="Continue"
@@ -58,11 +58,11 @@ const HistoryEntryRecapPage = () => {
                         {round.activePlayers.map(player => {
                             return (
                                 <View key={`${id}${player.id}`}>
-                                    <StyledText>
+                                    <Text>
                                         {player.name}
                                         {player.id === round.setterId &&
                                             ' - Setter'}
-                                    </StyledText>
+                                    </Text>
                                     <LettersDisplay
                                         letters={letters}
                                         totalPoints={player.points}
@@ -73,9 +73,7 @@ const HistoryEntryRecapPage = () => {
                         {round.eliminatedPlayers.map((player, idx) => {
                             return (
                                 <View key={`${id}${player.id}`}>
-                                    <StyledText>
-                                        {player.name} - Eliminated
-                                    </StyledText>
+                                    <Text>{player.name} - Eliminated</Text>
                                     <LettersDisplay
                                         letters={letters}
                                         totalPoints={player.points}

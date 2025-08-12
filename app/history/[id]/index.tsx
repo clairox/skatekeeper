@@ -2,7 +2,7 @@ import { Link, useLocalSearchParams, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
 import history from '../../../lib/history'
 import { FlatList, View } from 'react-native'
-import StyledText from '../../../components/ui/StyledText'
+import Text from '../../../components/ui/Text'
 import { formatDate } from '../../../utils/helpers'
 import OverflowMenu from '../../../components/ui/OverflowMenu'
 
@@ -54,30 +54,30 @@ const HistoryEntryPage = () => {
         return (
             <View>
                 <OverflowMenu options={menuOptions} />
-                <StyledText>
+                <Text>
                     {formatDate(record.createdAt)}
                     {!record.completed && ' - Incomplete'}
-                </StyledText>
+                </Text>
                 {record.data.winnerId != null && (
-                    <StyledText>
+                    <Text>
                         Winner:{' '}
                         {
                             record.data.players.find(
                                 player => player.id === record.data.winnerId
                             )!.name
                         }
-                    </StyledText>
+                    </Text>
                 )}
-                <StyledText>Players:</StyledText>
+                <Text>Players:</Text>
                 <FlatList
                     data={record.data.players}
                     renderItem={({ item }) => {
-                        return <StyledText>{item.name}</StyledText>
+                        return <Text>{item.name}</Text>
                     }}
                     keyExtractor={item => item.id.toString()}
                 />
                 <Link href={`./${id}/recap`}>
-                    <StyledText>{'Go to recap ->'}</StyledText>
+                    <Text>{'Go to recap ->'}</Text>
                 </Link>
             </View>
         )

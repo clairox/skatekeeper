@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button, Modal, Pressable, View } from 'react-native'
-import StyledText from './StyledText'
+import Text from './Text'
 
 type OverflowMenuProps = {
     options: { title: string; onPress: () => void }[]
@@ -31,7 +31,7 @@ const OverflowMenu: React.FC<OverflowMenuProps> = ({ options }) => {
                                     height: 40,
                                 }}
                             >
-                                <StyledText>{option.title}</StyledText>
+                                <Text>{option.title}</Text>
                             </Pressable>
                         )
                     })}

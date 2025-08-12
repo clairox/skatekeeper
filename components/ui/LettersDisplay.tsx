@@ -1,5 +1,5 @@
 import { StyleProp, StyleSheet, TextStyle, View } from 'react-native'
-import StyledText from './StyledText'
+import Text from './Text'
 
 type LettersDisplayProps = {
     letters: string
@@ -19,9 +19,9 @@ const LettersDisplay: React.FC<LettersDisplayProps> = ({
                 }
 
                 return (
-                    <StyledText key={`${idx}-${letter}`} style={letterStyles}>
+                    <Text key={`${idx}-${letter}`} style={letterStyles}>
                         {letter}
-                    </StyledText>
+                    </Text>
                 )
             })}
         </View>

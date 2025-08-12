@@ -1,7 +1,7 @@
-import StyledText from './StyledText'
+import Text from './Text'
 
 const Spinner = () => {
-    return <StyledText>Loading...</StyledText>
+    return <Text>Loading...</Text>
 }
 
 export default Spinner

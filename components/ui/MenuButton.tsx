@@ -6,7 +6,7 @@ import {
     StyleSheet,
     TextProps,
 } from 'react-native'
-import StyledText from './StyledText'
+import Text from './Text'
 
 type MenuTextButtonProps = PressableProps & Pick<TextProps, 'children'>
 
@@ -18,9 +18,9 @@ const MenuTextButton: React.FC<MenuTextButtonProps> = ({
     const disabledStyle = { color: disabled ? '#bbb' : '#000' }
     return (
         <Pressable disabled={disabled} {...props}>
-            <StyledText style={[styles.menuButtonText, disabledStyle]}>
+            <Text style={[styles.menuButtonText, disabledStyle]}>
                 {children}
-            </StyledText>
+            </Text>
         </Pressable>
     )
 }

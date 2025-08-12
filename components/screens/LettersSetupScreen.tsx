@@ -1,6 +1,6 @@
 import StyledView from '../ui/StyledView'
 import { View } from 'react-native'
-import StyledText from '../ui/StyledText'
+import Text from '../ui/Text'
 import { MenuTextButton } from '../ui/MenuButton'
 
 type LettersSetupProps = {
@@ -11,7 +11,7 @@ type LettersSetupProps = {
 const LettersSetup: React.FC<LettersSetupProps> = ({ setLetters, done }) => {
     return (
         <StyledView style={{ gap: 20 }}>
-            <StyledText>Choose a game mode</StyledText>
+            <Text>Choose a game mode</Text>
             <View
                 style={{
                     flexDirection: 'row',

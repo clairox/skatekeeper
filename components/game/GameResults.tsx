@@ -1,5 +1,5 @@
 import StyledView from '../ui/StyledView'
-import StyledText from '../ui/StyledText'
+import Text from '../ui/Text'
 import LettersDisplay from '../ui/LettersDisplay'
 import { View } from 'react-native'
 import { MenuTextButton } from '../ui/MenuButton'
@@ -31,7 +31,7 @@ const GameResults = () => {
 
     return (
         <StyledView>
-            <StyledText>{winner.name} is the winner!</StyledText>
+            <Text>{winner.name} is the winner!</Text>
             <LettersDisplay letters={letters} totalPoints={winner.points} />
             <View style={{ gap: 20 }}>
                 <MenuTextButton onPress={playAgain}>Play again</MenuTextButton>
