@@ -11,7 +11,7 @@
 ### In Progress
 
 - [ ] Game history
-    - [ ] Continue unfinished game
+    - [x] Continue unfinished game
     - [x] Delay history record initialization until play phase
     - [x] Delete individual history records
     - [x] Clear incomplete
