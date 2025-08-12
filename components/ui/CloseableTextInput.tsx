@@ -5,7 +5,7 @@ import {
     TextInputProps,
     View,
 } from 'react-native'
-import { MenuTextButton } from './MenuButton'
+import TextButton from './TextButton'
 import { useEffect } from 'react'
 
 type CloseableTextInputProps = TextInputProps & {
@@ -33,7 +33,7 @@ const CloseableTextInput: React.FC<CloseableTextInputProps> = ({
     return (
         <View style={[styles.container, style]}>
             <TextInput style={styles.textInput} {...props} />
-            <MenuTextButton onPress={onClose}>x</MenuTextButton>
+            <TextButton onPress={onClose}>x</TextButton>
         </View>
     )
 }

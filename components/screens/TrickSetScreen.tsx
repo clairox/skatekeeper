@@ -4,7 +4,7 @@ import LettersDisplay from '../ui/LettersDisplay'
 import Text from '../ui/Text'
 import CompactView from '../ui/CompactView'
 import { StyleSheet, View } from 'react-native'
-import { MenuTextButton } from '../ui/MenuButton'
+import TextButton from '../ui/TextButton'
 import CloseableTextInput from '../ui/CloseableTextInput'
 
 const TrickSetView = () => {
@@ -38,12 +38,10 @@ const TrickSetView = () => {
                 />
             ) : (
                 <View style={styles.buttonRow}>
-                    <MenuTextButton onPress={onTrickSetFailure}>
-                        Missed
-                    </MenuTextButton>
-                    <MenuTextButton onPress={() => setTrickLanded(true)}>
+                    <TextButton onPress={onTrickSetFailure}>Missed</TextButton>
+                    <TextButton onPress={() => setTrickLanded(true)}>
                         Landed
-                    </MenuTextButton>
+                    </TextButton>
                 </View>
             )}
         </CompactView>

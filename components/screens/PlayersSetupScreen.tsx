@@ -2,7 +2,7 @@ import { View } from 'react-native'
 import Text from '../ui/Text'
 import CompactView from '../ui/CompactView'
 import PlayerInput from '../ui/PlayerInput'
-import { MenuTextButton } from '../ui/MenuButton'
+import TextButton from '../ui/TextButton'
 
 type PlayersSetupProps = {
     players: Player[]
@@ -36,9 +36,9 @@ const PlayersSetup: React.FC<PlayersSetupProps> = ({
                     onPlayerAdded={addPlayer}
                 />
             </View>
-            <MenuTextButton disabled={players.length < 2} onPress={done}>
+            <TextButton disabled={players.length < 2} onPress={done}>
                 Done
-            </MenuTextButton>
+            </TextButton>
         </CompactView>
     )
 }

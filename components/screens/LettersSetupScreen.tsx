@@ -1,7 +1,7 @@
 import CompactView from '../ui/CompactView'
 import { View } from 'react-native'
 import Text from '../ui/Text'
-import { MenuTextButton } from '../ui/MenuButton'
+import TextButton from '../ui/TextButton'
 
 type LettersSetupProps = {
     setLetters: (letters: string) => void
@@ -20,22 +20,22 @@ const LettersSetup: React.FC<LettersSetupProps> = ({ setLetters, done }) => {
                     width: '70%',
                 }}
             >
-                <MenuTextButton
+                <TextButton
                     onPress={() => {
                         setLetters('SKATE')
                         done()
                     }}
                 >
                     SKATE
-                </MenuTextButton>
-                <MenuTextButton
+                </TextButton>
+                <TextButton
                     onPress={() => {
                         setLetters('SK8')
                         done()
                     }}
                 >
                     SK8
-                </MenuTextButton>
+                </TextButton>
             </View>
         </CompactView>
     )

@@ -3,7 +3,7 @@ import { useGameContext } from '../../context/GameContext'
 import LettersDisplay from '../ui/LettersDisplay'
 import Text from '../ui/Text'
 import CompactView from '../ui/CompactView'
-import { MenuTextButton } from '../ui/MenuButton'
+import TextButton from '../ui/TextButton'
 
 const TrickCopyView = () => {
     const {
@@ -21,12 +21,8 @@ const TrickCopyView = () => {
                 totalPoints={currentPlayer.points}
             />
             <View style={styles.buttonRow}>
-                <MenuTextButton onPress={onTrickCopyFailure}>
-                    Missed
-                </MenuTextButton>
-                <MenuTextButton onPress={onTrickCopySuccess}>
-                    Landed
-                </MenuTextButton>
+                <TextButton onPress={onTrickCopyFailure}>Missed</TextButton>
+                <TextButton onPress={onTrickCopySuccess}>Landed</TextButton>
             </View>
         </CompactView>
     )

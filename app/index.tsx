@@ -1,6 +1,6 @@
 import { Image, StyleSheet, useColorScheme, View } from 'react-native'
 import { useRouter } from 'expo-router'
-import { MenuTextButton } from '../components/ui/MenuButton'
+import TextButton from '../components/ui/TextButton'
 
 const Home = () => {
     const router = useRouter()
@@ -18,16 +18,16 @@ const Home = () => {
                 style={styles.brand}
                 resizeMode="contain"
             />
-            <MenuTextButton
+            <TextButton
                 onPress={() =>
                     router.push('/game?refreshKey=' + Date.now().toString())
                 }
             >
                 New Game
-            </MenuTextButton>
-            <MenuTextButton onPress={() => router.push('/history')}>
+            </TextButton>
+            <TextButton onPress={() => router.push('/history')}>
                 History
-            </MenuTextButton>
+            </TextButton>
         </View>
     )
 }

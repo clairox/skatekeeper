@@ -2,7 +2,7 @@ import CompactView from '../ui/CompactView'
 import Text from '../ui/Text'
 import LettersDisplay from '../ui/LettersDisplay'
 import { View } from 'react-native'
-import { MenuTextButton } from '../ui/MenuButton'
+import TextButton from '../ui/TextButton'
 import { useRouter } from 'expo-router'
 import { useGameContext } from '../../context/GameContext'
 
@@ -34,10 +34,10 @@ const GameResults = () => {
             <Text>{winner.name} is the winner!</Text>
             <LettersDisplay letters={letters} totalPoints={winner.points} />
             <View style={{ gap: 20 }}>
-                <MenuTextButton onPress={playAgain}>Play again</MenuTextButton>
-                <MenuTextButton onPress={() => router.dismissTo('/')}>
+                <TextButton onPress={playAgain}>Play again</TextButton>
+                <TextButton onPress={() => router.dismissTo('/')}>
                     Home
-                </MenuTextButton>
+                </TextButton>
             </View>
         </CompactView>
     )
