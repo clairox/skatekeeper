@@ -2,8 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const STORAGE_KEY = '@skatekeeper:history'
 
-AsyncStorage.clear()
-
 const getStoredHistory = async (): Promise<HistoryRecord[]> => {
     const value = await AsyncStorage.getItem(STORAGE_KEY)
     if (value) {
