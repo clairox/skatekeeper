@@ -16,7 +16,7 @@ const HistoryEntryPage = () => {
     }
 
     const deleteRecord = async (): Promise<void> => {
-        await history.deleteRecord(parseInt(id))
+        await history.deleteRecord(id)
         router.replace('/history')
     }
 
@@ -30,7 +30,7 @@ const HistoryEntryPage = () => {
     useEffect(() => {
         const fetchRecord = async () => {
             try {
-                const result = await history.getRecord(parseInt(id))
+                const result = await history.getRecord(id)
                 if (!result) {
                     throw new Error(`Record with id ${id} does not exist.`)
                 }

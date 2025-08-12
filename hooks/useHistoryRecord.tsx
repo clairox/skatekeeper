@@ -1,12 +1,11 @@
 import { useEffect, useRef } from 'react'
 import history from '../lib/history'
 
-const useHistoryRecord = (id?: number) => {
+const useHistoryRecord = (id?: string) => {
     const record = useRef<HistoryRecord | null>(null)
 
     useEffect(() => {
         if (id) {
-            console.log('Found id:', id)
             const fetchRecord = async () => {
                 record.current = (await history.getRecord(id)) ?? null
             }
@@ -20,9 +19,7 @@ const useHistoryRecord = (id?: number) => {
             throw new Error('Cannot call saveHistory() record.current is null.')
         }
 
-        const idx = await (id ??
-            history.getRecords().then(records => records.length - 1))
-        history.updateRecord(idx, record.current)
+        history.updateRecord(id!, record.current)
     }
 
     const initRound = (): HistoryRound => {

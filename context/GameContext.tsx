@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router'
 import useHistoryRecord from '../hooks/useHistoryRecord'
 
 type GameContextValue = {
-    gameId?: number
+    gameId?: string
     state: GameState & { currentPlayer: Player }
     setupGame: (letters: string, players: Player[]) => Promise<void>
     onTrickSetSuccess: (trick: string) => Promise<void>
@@ -15,7 +15,7 @@ type GameContextValue = {
 }
 const GameContext = createContext<GameContextValue>({} as GameContextValue)
 
-type GameProviderProps = React.PropsWithChildren<{ gameId?: number }>
+type GameProviderProps = React.PropsWithChildren<{ gameId?: string }>
 
 export const GameProvider: React.FC<GameProviderProps> = ({
     gameId,

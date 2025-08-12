@@ -1,5 +1,5 @@
 type GameState = {
-    id?: number
+    id?: string
     letters: string
     players: Player[]
     activePlayers: Player[]
@@ -33,7 +33,7 @@ type StepProps = {
 }
 
 type HistoryRecord = {
-    id: number
+    id: string
     completed: boolean
     data: HistoryData
     createdAt: Date

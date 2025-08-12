@@ -8,7 +8,7 @@ const GamePage = () => {
     console.log('Initializing game:', refreshKey)
 
     return (
-        <GameProvider gameId={parseInt(id)} key={refreshKey}>
+        <GameProvider gameId={id} key={refreshKey}>
             <Game />
         </GameProvider>
     )

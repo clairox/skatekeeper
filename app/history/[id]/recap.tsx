@@ -15,7 +15,7 @@ const HistoryEntryRecapPage = () => {
     useEffect(() => {
         const fetchRounds = async () => {
             try {
-                const result = await history.getRecord(parseInt(id))
+                const result = await history.getRecord(id)
                 if (!result) {
                     throw new Error(`Record with id ${id} does not exist.`)
                 }
@@ -55,7 +55,7 @@ const HistoryEntryRecapPage = () => {
                                 />
                             )}
                         </View>
-                        {round.activePlayers.map((player, idx) => {
+                        {round.activePlayers.map(player => {
                             return (
                                 <View key={`${id}${player.id}`}>
                                     <StyledText>
