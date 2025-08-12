@@ -1,3 +1,14 @@
+type GameState = {
+    id?: number
+    letters: string
+    players: Player[]
+    activePlayers: Player[]
+    turn: number
+    currentTrick: string | null
+    setterId: number | null
+    winnerId: number | null
+}
+
 type Game = {
     completed: boolean
     currentPlayers: Player[]

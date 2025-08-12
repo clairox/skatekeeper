@@ -11,15 +11,16 @@
 ### In Progress
 
 - [ ] Game
-    - [ ] Refactor /game subroutes into a single consolidated endpoint
+    - [x] Refactor /game subroutes into a single consolidated endpoint
     - [ ] Move history management from context into custom hook
-    - [ ] Relocate game state logic to /game root component
+    - [x] Relocate game state logic to /game root component
 - [ ] Game history
     - [ ] Continue unfinished game
     - [x] Delay history record initialization until play phase
     - [x] Delete individual history records
     - [x] Clear incomplete
     - [x] Clear history
+    - [ ] Use uuid instead of number
 
 ### Done
 

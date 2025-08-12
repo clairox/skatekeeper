@@ -1,46 +1,144 @@
-import { createContext, PropsWithChildren, useContext, useRef } from 'react'
-import { createGameStore, GameState } from '../store'
-import { StoreApi, useStore } from 'zustand'
-import { useHistoryRecordContext } from './HistoryRecordContext'
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useReducer,
+    useState,
+} from 'react'
+import history from '../lib/history'
+import Spinner from '../components/ui/Spinner'
+import { useRouter } from 'expo-router'
+import { gameReducer } from '../lib/gameReducer'
 
-type GameStore = StoreApi<GameState>
-const GameContext = createContext<GameStore>({} as GameStore)
+type GameContextValue = {
+    gameId?: number
+    state: GameState & { currentPlayer: Player }
+    setupGame: (letters: string, players: Player[]) => void
+    onTrickSetSuccess: (trick: string) => void
+    onTrickSetFailure: () => void
+    onTrickCopySuccess: () => void
+    onTrickCopyFailure: () => void
+    reset: () => Promise<void>
+}
+const GameContext = createContext<GameContextValue>({} as GameContextValue)
 
-type GameProviderProps = PropsWithChildren
-export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
-    const recordHandler = useHistoryRecordContext()
-    const storeRef = useRef<GameStore>({} as GameStore)
-    if (Object.keys(storeRef.current).length === 0) {
-        storeRef.current = createGameStore(recordHandler)
+type GameProviderProps = React.PropsWithChildren<{ gameId?: number }>
+
+export const GameProvider: React.FC<GameProviderProps> = ({
+    gameId,
+    children,
+}) => {
+    type LoadStatus = 'idle' | 'loading' | 'succeeded' | 'failed'
+    const [recordStatus, setRecordStatus] = useState<LoadStatus>(
+        gameId ? 'loading' : 'idle'
+    )
+    const [state, dispatch] = useReducer(gameReducer, {
+        letters: '',
+        players: [],
+        activePlayers: [],
+        turn: 0,
+        currentTrick: null,
+        setterId: null,
+        winnerId: null,
+    })
+
+    const setupGame = async (
+        letters: string,
+        players: Player[]
+    ): Promise<void> => {
+        dispatch({ type: 'SETUP_GAME', payload: { letters, players } })
+    }
+
+    const onTrickSetSuccess = async (trick: string): Promise<void> => {
+        dispatch({ type: 'TRICK_SET_SUCCESS', payload: { trick } })
+    }
+
+    const onTrickSetFailure = async (): Promise<void> => {
+        dispatch({ type: 'TRICK_SET_FAILURE' })
+    }
+
+    const onTrickCopySuccess = async (): Promise<void> => {
+        dispatch({ type: 'TRICK_COPY_SUCCESS' })
+    }
+
+    const onTrickCopyFailure = async (): Promise<void> => {
+        dispatch({ type: 'TRICK_COPY_FAILURE' })
+    }
+
+    const reset = async (): Promise<void> => {
+        dispatch({ type: 'RESET' })
+    }
+
+    useEffect(() => {
+        if (gameId) {
+            const fetchRecord = async () => {
+                const record = await history.getRecord(gameId)
+                if (!record) {
+                    // TODO: Warn user that something went wrong
+                    setRecordStatus('failed')
+                    return
+                }
+
+                if (record.completed || record.data.winnerId) {
+                    // TODO: Warn user that game is already complete
+                    setRecordStatus('failed')
+                    return
+                }
+
+                const gameData = record.data
+                const currentRound = gameData.rounds[gameData.rounds.length - 1]
+
+                dispatch({
+                    type: 'LOAD_GAME',
+                    payload: {
+                        id: record.id,
+                        letters: gameData.letters ?? '',
+                        players: gameData.players,
+                        activePlayers: gameData.players.filter(
+                            player => !player.isEliminated
+                        ),
+                        turn: gameData.turn,
+                        currentTrick: currentRound.trick ?? null,
+                        setterId: currentRound.setterId ?? null,
+                        winnerId: null,
+                    },
+                })
+                setRecordStatus('succeeded')
+            }
+
+            fetchRecord()
+        }
+    }, [gameId])
+
+    const router = useRouter()
+
+    if (recordStatus === 'failed') {
+        router.back()
+    }
+
+    if (recordStatus === 'loading') {
+        return <Spinner />
     }
 
     return (
-        <GameContext.Provider value={storeRef.current}>
+        <GameContext.Provider
+            value={{
+                gameId,
+                state: {
+                    ...state,
+                    currentPlayer: state.activePlayers[state.turn],
+                },
+                setupGame,
+                onTrickSetSuccess,
+                onTrickSetFailure,
+                onTrickCopySuccess,
+                onTrickCopyFailure,
+                reset,
+            }}
+        >
             {children}
         </GameContext.Provider>
     )
 }
 
-function useGameStore<T>(selector: (state: GameState) => T): T {
-    const store = useContext(GameContext)
-    if (!store) {
-        throw new Error('Missing GameStoreContext')
-    }
-
-    return useStore(store, selector)
-}
-
-export const useLetters = () => useGameStore(state => state.letters)
-export const usePlayers = () => useGameStore(state => state.players)
-export const useActivePlayers = () => useGameStore(state => state.activePlayers)
-export const useSetterId = () => useGameStore(state => state.setterId)
-export const useCurrentTrick = () => useGameStore(state => state.currentTrick)
-export const useTurn = () => useGameStore(state => state.turn)
-export const useWinnerId = () => useGameStore(state => state.winnerId)
-
-export const useEliminatedPlayers = () => {
-    const players = useGameStore(state => state.players)
-    return players.filter(player => player.isEliminated)
-}
-
-export const useGameActions = () => useGameStore(state => state.actions)
+export const useGameContext = () => useContext(GameContext)

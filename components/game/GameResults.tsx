@@ -1,23 +1,23 @@
+import StyledView from '../ui/StyledView'
+import StyledText from '../ui/StyledText'
+import LettersDisplay from '../ui/LettersDisplay'
 import { View } from 'react-native'
-import LettersDisplay from '../../components/ui/LettersDisplay'
+import { MenuTextButton } from '../ui/MenuButton'
 import { useRouter } from 'expo-router'
-import { useLetters, usePlayers, useWinnerId } from '../../context/GameContext'
-import StyledView from '../../components/ui/StyledView'
-import StyledText from '../../components/ui/StyledText'
-import { MenuTextButton } from '../../components/ui/MenuButton'
+import { useGameContext } from '../../context/GameContext'
 
-const GameOverPhase = () => {
+const GameResults = () => {
     const router = useRouter()
 
-    const letters = useLetters()
-    const players = usePlayers()
-    const winnerId = useWinnerId()
+    const {
+        state: { winnerId, activePlayers, letters },
+    } = useGameContext()
 
     if (winnerId == null) {
         throw new Error('An unexpected error has occurred: No winner found')
     }
 
-    const winner: Player | undefined = players.find(
+    const winner: Player | undefined = activePlayers.find(
         player => player.id === winnerId
     )
 
@@ -25,11 +25,8 @@ const GameOverPhase = () => {
         throw new Error('An unexpected error has occurred: No winner found')
     }
 
-    const playAgain = () => {
-        router.replace({
-            pathname: './setup',
-            params: { instance: Date.now().toString() },
-        })
+    const playAgain = async () => {
+        router.replace('/game?refreshKey=' + Date.now().toString())
     }
 
     return (
@@ -46,4 +43,4 @@ const GameOverPhase = () => {
     )
 }
 
-export default GameOverPhase
+export default GameResults

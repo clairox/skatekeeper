@@ -18,7 +18,11 @@ const Home = () => {
                 style={styles.brand}
                 resizeMode="contain"
             />
-            <MenuTextButton onPress={() => router.push('/game/setup')}>
+            <MenuTextButton
+                onPress={() =>
+                    router.push('/game?refreshKey=' + Date.now().toString())
+                }
+            >
                 New Game
             </MenuTextButton>
             <MenuTextButton onPress={() => router.push('/history')}>

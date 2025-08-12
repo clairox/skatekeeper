@@ -1,37 +1,20 @@
 import { View } from 'react-native'
-import PlayerInput from '../ui/PlayerInput'
-import { useEffect, useState } from 'react'
 import StyledText from '../ui/StyledText'
 import StyledView from '../ui/StyledView'
+import PlayerInput from '../ui/PlayerInput'
 import { MenuTextButton } from '../ui/MenuButton'
 
-type AddPlayersStepProps = {
+type PlayersSetupProps = {
     players: Player[]
-    setPlayers: (players: Player[]) => void
-    next: () => void
+    addPlayer: (name: string) => void
+    done: () => void
 }
 
-const AddPlayersStep: React.FC<AddPlayersStepProps> = ({
+const PlayersSetup: React.FC<PlayersSetupProps> = ({
     players,
-    setPlayers,
-    next,
+    addPlayer,
+    done,
 }) => {
-    const [idCounter, setIdCounter] = useState(-1)
-
-    const addPlayer = (name: string) => {
-        const newPlayer: Player = {
-            id: idCounter,
-            name,
-            points: 0,
-            isEliminated: false,
-        }
-        setPlayers([...players, newPlayer])
-    }
-
-    useEffect(() => {
-        setIdCounter(prev => prev + 1)
-    }, [players.length])
-
     return (
         <StyledView>
             <StyledText>{"Who's playing?"}</StyledText>
@@ -55,11 +38,11 @@ const AddPlayersStep: React.FC<AddPlayersStepProps> = ({
                     onPlayerAdded={addPlayer}
                 />
             </View>
-            <MenuTextButton disabled={players.length < 2} onPress={next}>
+            <MenuTextButton disabled={players.length < 2} onPress={done}>
                 Done
             </MenuTextButton>
         </StyledView>
     )
 }
 
-export default AddPlayersStep
+export default PlayersSetup
