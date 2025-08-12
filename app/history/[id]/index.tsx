@@ -12,7 +12,7 @@ const HistoryEntryPage = () => {
 
     const [record, setRecord] = useState<HistoryRecord | null>(null)
     const continueGame = (): void => {
-        router.push({ pathname: '/game/play', params: { id } })
+        router.push({ pathname: '/game', params: { id } })
     }
 
     const deleteRecord = async (): Promise<void> => {
