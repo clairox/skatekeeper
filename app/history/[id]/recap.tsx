@@ -43,15 +43,17 @@ const HistoryEntryRecapPage = () => {
                             <StyledText
                                 style={styles.roundHeaderText}
                             >{`${index + 1}: ${Boolean(round.trick && round.completed) ? round.trick : 'Incomplete'}`}</StyledText>
-                            <Button
-                                title="Continue"
-                                onPress={() =>
-                                    router.push({
-                                        pathname: '/game/play',
-                                        params: { id },
-                                    })
-                                }
-                            />
+                            {!round.completed && (
+                                <Button
+                                    title="Continue"
+                                    onPress={() =>
+                                        router.push({
+                                            pathname: '/game',
+                                            params: { id },
+                                        })
+                                    }
+                                />
+                            )}
                         </View>
                         {round.activePlayers.map((player, idx) => {
                             return (
