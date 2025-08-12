@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useGameContext } from '../../context/GameContext'
 import LettersDisplay from '../ui/LettersDisplay'
 import Text from '../ui/Text'
-import StyledView from '../ui/StyledView'
+import CompactView from '../ui/CompactView'
 import { StyleSheet, View } from 'react-native'
 import { MenuTextButton } from '../ui/MenuButton'
 import CloseableTextInput from '../ui/CloseableTextInput'
@@ -17,7 +17,7 @@ const TrickSetView = () => {
     const [trickLanded, setTrickLanded] = useState(false)
 
     return (
-        <StyledView>
+        <CompactView>
             <Text>{currentPlayer.name} sets the trick!</Text>
             <LettersDisplay
                 letters={letters}
@@ -46,7 +46,7 @@ const TrickSetView = () => {
                     </MenuTextButton>
                 </View>
             )}
-        </StyledView>
+        </CompactView>
     )
 }
 

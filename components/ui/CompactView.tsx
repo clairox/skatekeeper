@@ -1,12 +1,12 @@
 import { StyleSheet, View, ViewProps } from 'react-native'
 
-type StyledViewProps = ViewProps
+type CompactViewProps = ViewProps
 
-const StyledView: React.FC<StyledViewProps> = ({ style, ...props }) => {
+const CompactView: React.FC<CompactViewProps> = ({ style, ...props }) => {
     return <View style={[styles.container, style]} {...props} />
 }
 
-export default StyledView
+export default CompactView
 
 const styles = StyleSheet.create({
     container: {

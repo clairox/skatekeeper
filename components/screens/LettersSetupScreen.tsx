@@ -1,4 +1,4 @@
-import StyledView from '../ui/StyledView'
+import CompactView from '../ui/CompactView'
 import { View } from 'react-native'
 import Text from '../ui/Text'
 import { MenuTextButton } from '../ui/MenuButton'
@@ -10,7 +10,7 @@ type LettersSetupProps = {
 
 const LettersSetup: React.FC<LettersSetupProps> = ({ setLetters, done }) => {
     return (
-        <StyledView style={{ gap: 20 }}>
+        <CompactView style={{ gap: 20 }}>
             <Text>Choose a game mode</Text>
             <View
                 style={{
@@ -37,7 +37,7 @@ const LettersSetup: React.FC<LettersSetupProps> = ({ setLetters, done }) => {
                     SK8
                 </MenuTextButton>
             </View>
-        </StyledView>
+        </CompactView>
     )
 }
 

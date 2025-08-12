@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import Text from '../ui/Text'
-import StyledView from '../ui/StyledView'
+import CompactView from '../ui/CompactView'
 import PlayerInput from '../ui/PlayerInput'
 import { MenuTextButton } from '../ui/MenuButton'
 
@@ -16,7 +16,7 @@ const PlayersSetup: React.FC<PlayersSetupProps> = ({
     done,
 }) => {
     return (
-        <StyledView>
+        <CompactView>
             <Text>{"Who's playing?"}</Text>
             <View style={{ gap: 10, paddingHorizontal: 30, width: '100%' }}>
                 {players.map((player, idx) => (
@@ -39,7 +39,7 @@ const PlayersSetup: React.FC<PlayersSetupProps> = ({
             <MenuTextButton disabled={players.length < 2} onPress={done}>
                 Done
             </MenuTextButton>
-        </StyledView>
+        </CompactView>
     )
 }
 

@@ -1,4 +1,4 @@
-import StyledView from '../ui/StyledView'
+import CompactView from '../ui/CompactView'
 import Text from '../ui/Text'
 import LettersDisplay from '../ui/LettersDisplay'
 import { View } from 'react-native'
@@ -30,7 +30,7 @@ const GameResults = () => {
     }
 
     return (
-        <StyledView>
+        <CompactView>
             <Text>{winner.name} is the winner!</Text>
             <LettersDisplay letters={letters} totalPoints={winner.points} />
             <View style={{ gap: 20 }}>
@@ -39,7 +39,7 @@ const GameResults = () => {
                     Home
                 </MenuTextButton>
             </View>
-        </StyledView>
+        </CompactView>
     )
 }
 
