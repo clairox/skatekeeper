@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { View, StyleSheet, FlatList, Button } from 'react-native'
 import history from '../../../lib/history'
 import Text from '../../../components/ui/Text'
-import LettersDisplay from '../../../components/ui/LettersDisplay'
+import LetterProgress from '../../../components/ui/LetterProgress'
 
 const HistoryEntryRecapPage = () => {
     const router = useRouter()
@@ -63,7 +63,7 @@ const HistoryEntryRecapPage = () => {
                                         {player.id === round.setterId &&
                                             ' - Setter'}
                                     </Text>
-                                    <LettersDisplay
+                                    <LetterProgress
                                         letters={letters}
                                         totalPoints={player.points}
                                     />
@@ -74,7 +74,7 @@ const HistoryEntryRecapPage = () => {
                             return (
                                 <View key={`${id}${player.id}`}>
                                     <Text>{player.name} - Eliminated</Text>
-                                    <LettersDisplay
+                                    <LetterProgress
                                         letters={letters}
                                         totalPoints={player.points}
                                     />

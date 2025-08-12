@@ -1,12 +1,12 @@
 import { StyleProp, StyleSheet, TextStyle, View } from 'react-native'
 import Text from './Text'
 
-type LettersDisplayProps = {
+type LetterProgressProps = {
     letters: string
     totalPoints: number
 }
 
-const LettersDisplay: React.FC<LettersDisplayProps> = ({
+const LetterProgress: React.FC<LetterProgressProps> = ({
     letters,
     totalPoints,
 }) => {
@@ -28,7 +28,7 @@ const LettersDisplay: React.FC<LettersDisplayProps> = ({
     )
 }
 
-export default LettersDisplay
+export default LetterProgress
 
 const styles = StyleSheet.create({
     container: {

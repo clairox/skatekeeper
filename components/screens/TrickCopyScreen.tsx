@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { useGameContext } from '../../context/GameContext'
-import LettersDisplay from '../ui/LettersDisplay'
+import LetterProgress from '../ui/LetterProgress'
 import Text from '../ui/Text'
 import CompactView from '../ui/CompactView'
 import TextButton from '../ui/TextButton'
@@ -16,7 +16,7 @@ const TrickCopyView = () => {
         <CompactView>
             <Text>Trick to copy: {currentTrick}</Text>
             <Text>{`${currentPlayer.name} it's your turn!`}</Text>
-            <LettersDisplay
+            <LetterProgress
                 letters={letters}
                 totalPoints={currentPlayer.points}
             />

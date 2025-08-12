@@ -1,6 +1,6 @@
 import CompactView from '../ui/CompactView'
 import Text from '../ui/Text'
-import LettersDisplay from '../ui/LettersDisplay'
+import LetterProgress from '../ui/LetterProgress'
 import { View } from 'react-native'
 import TextButton from '../ui/TextButton'
 import { useRouter } from 'expo-router'
@@ -32,7 +32,7 @@ const GameResults = () => {
     return (
         <CompactView>
             <Text>{winner.name} is the winner!</Text>
-            <LettersDisplay letters={letters} totalPoints={winner.points} />
+            <LetterProgress letters={letters} totalPoints={winner.points} />
             <View style={{ gap: 20 }}>
                 <TextButton onPress={playAgain}>Play again</TextButton>
                 <TextButton onPress={() => router.dismissTo('/')}>

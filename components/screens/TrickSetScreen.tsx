@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useGameContext } from '../../context/GameContext'
-import LettersDisplay from '../ui/LettersDisplay'
+import LetterProgress from '../ui/LetterProgress'
 import Text from '../ui/Text'
 import CompactView from '../ui/CompactView'
 import { StyleSheet, View } from 'react-native'
@@ -19,7 +19,7 @@ const TrickSetView = () => {
     return (
         <CompactView>
             <Text>{currentPlayer.name} sets the trick!</Text>
-            <LettersDisplay
+            <LetterProgress
                 letters={letters}
                 totalPoints={currentPlayer.points}
             />
