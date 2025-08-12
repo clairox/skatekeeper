@@ -1,47 +1,37 @@
-import {
-    createContext,
-    PropsWithChildren,
-    useContext,
-    useEffect,
-    useRef,
-} from 'react'
+import { useEffect, useRef } from 'react'
 import history from '../lib/history'
 
-const HistoryRecordContext = createContext<HistoryRecordHandler>(
-    {} as HistoryRecordHandler
-)
-
-type HistoryRecordProviderProps = PropsWithChildren<{
-    recordId?: number
-}>
-
-export const HistoryRecordProvider: React.FC<HistoryRecordProviderProps> = ({
-    children,
-    recordId,
-}) => {
-    const record = useRef<HistoryRecord>({} as HistoryRecord)
+const useHistoryRecord = (id?: number) => {
+    const record = useRef<HistoryRecord | null>(null)
 
     useEffect(() => {
-        const fetchRecord = async (id: number) => {
-            console.log('Fetching record...')
-            const result = await history.getRecord(id)
-            if (result) {
-                record.current = result
+        if (id) {
+            console.log('Found id:', id)
+            const fetchRecord = async () => {
+                record.current = (await history.getRecord(id)) ?? null
             }
-        }
 
-        if (recordId) {
-            fetchRecord(recordId)
+            fetchRecord()
         }
-    }, [recordId])
+    }, [id])
 
     const saveHistory = async (): Promise<void> => {
-        const idx = await (recordId ??
+        if (!record.current) {
+            throw new Error('Cannot call saveHistory() record.current is null.')
+        }
+
+        const idx = await (id ??
             history.getRecords().then(records => records.length - 1))
         history.updateRecord(idx, record.current)
     }
 
     const initRound = (): HistoryRound => {
+        if (!record.current) {
+            throw new Error(
+                'Cannot call initRound() if record.current is null.'
+            )
+        }
+
         const prevRecord = record.current
         const activePlayers = prevRecord.data.players.filter(
             player => !player.isEliminated
@@ -59,7 +49,23 @@ export const HistoryRecordProvider: React.FC<HistoryRecordProviderProps> = ({
         }
     }
 
+    const getRecord = (): HistoryRecord => {
+        if (!record.current) {
+            throw new Error(
+                'Cannot call getRecord() if record.current is null.'
+            )
+        }
+
+        return record.current
+    }
+
     const getCurrentRound = (): { data: HistoryRound; idx: number } => {
+        if (!record.current) {
+            throw new Error(
+                'Cannot call getCurrentRound() if record.current is null.'
+            )
+        }
+
         const roundCount = record.current.data.rounds.length
         return {
             data: record.current.data.rounds[roundCount - 1],
@@ -68,19 +74,39 @@ export const HistoryRecordProvider: React.FC<HistoryRecordProviderProps> = ({
     }
 
     const setRecord = (data: Partial<HistoryRecord>): void => {
+        if (!record.current) {
+            throw new Error(
+                'Cannot call setRecord() if record.current is null.'
+            )
+        }
+
         record.current = { ...record.current, ...data }
     }
 
     const setRecordData = (data: Partial<HistoryData>): void => {
+        if (!record.current) {
+            throw new Error(
+                'Cannot call setRecordData() if record.current is null.'
+            )
+        }
+
         record.current.data = { ...record.current.data, ...data }
     }
 
     const setRecordRound = (idx: number, data: Partial<HistoryRound>): void => {
+        if (!record.current) {
+            throw new Error(
+                'Cannot call setRecordRound() if record.current is null.'
+            )
+        }
+
         const prevRound = record.current.data.rounds[idx]
         record.current.data.rounds[idx] = { ...prevRound, ...data }
     }
-
-    const init = async (letters: string, players: Player[]): Promise<void> => {
+    const init = async (
+        letters: string,
+        players: Player[]
+    ): Promise<HistoryRecord> => {
         console.log('Initializing record...')
         const newRecord = await history.addRecord({
             completed: false,
@@ -100,7 +126,8 @@ export const HistoryRecordProvider: React.FC<HistoryRecordProviderProps> = ({
             completedAt: null,
         })
 
-        setRecord(newRecord)
+        record.current = newRecord
+        return newRecord
     }
 
     const update = async (data: UpdateHistoryValues): Promise<void> => {
@@ -158,7 +185,7 @@ export const HistoryRecordProvider: React.FC<HistoryRecordProviderProps> = ({
 
             const gameOver = winnerId != null
             if (!gameOver) {
-                const rounds = [...record.current.data.rounds, initRound()]
+                const rounds = [...getRecord().data.rounds, initRound()]
                 setRecordData({ rounds })
             }
         }
@@ -171,20 +198,7 @@ export const HistoryRecordProvider: React.FC<HistoryRecordProviderProps> = ({
         await saveHistory()
     }
 
-    const value = { init, update }
-
-    return (
-        <HistoryRecordContext.Provider value={value}>
-            {children}
-        </HistoryRecordContext.Provider>
-    )
+    return { init, update }
 }
 
-export const useHistoryRecordContext = () => {
-    const ctx = useContext(HistoryRecordContext)
-    if (!ctx) {
-        throw new Error('Missing HistoryRecordContext')
-    }
-
-    return ctx
-}
+export default useHistoryRecord

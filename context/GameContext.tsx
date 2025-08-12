@@ -1,24 +1,17 @@
-import {
-    createContext,
-    useContext,
-    useEffect,
-    useReducer,
-    useState,
-} from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import history from '../lib/history'
 import Spinner from '../components/ui/Spinner'
 import { useRouter } from 'expo-router'
-import { gameReducer } from '../lib/gameReducer'
+import useHistoryRecord from '../hooks/useHistoryRecord'
 
 type GameContextValue = {
     gameId?: number
     state: GameState & { currentPlayer: Player }
-    setupGame: (letters: string, players: Player[]) => void
-    onTrickSetSuccess: (trick: string) => void
-    onTrickSetFailure: () => void
-    onTrickCopySuccess: () => void
-    onTrickCopyFailure: () => void
-    reset: () => Promise<void>
+    setupGame: (letters: string, players: Player[]) => Promise<void>
+    onTrickSetSuccess: (trick: string) => Promise<void>
+    onTrickSetFailure: () => Promise<void>
+    onTrickCopySuccess: () => Promise<void>
+    onTrickCopyFailure: () => Promise<void>
 }
 const GameContext = createContext<GameContextValue>({} as GameContextValue)
 
@@ -32,7 +25,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({
     const [recordStatus, setRecordStatus] = useState<LoadStatus>(
         gameId ? 'loading' : 'idle'
     )
-    const [state, dispatch] = useReducer(gameReducer, {
+    const [state, setState] = useState<GameState>({
         letters: '',
         players: [],
         activePlayers: [],
@@ -42,31 +35,204 @@ export const GameProvider: React.FC<GameProviderProps> = ({
         winnerId: null,
     })
 
+    const { init, update } = useHistoryRecord(state.id)
+
+    const currentPlayer: Player = state.activePlayers[state.turn]
+
+    const randomizeArrayOrder = <T,>(array: T[]): T[] => {
+        let randomized = [...array]
+
+        let currentIdx = randomized.length
+        while (currentIdx > 0) {
+            let randomIdx = Math.floor(Math.random() * currentIdx)
+            currentIdx -= 1
+            ;[randomized[currentIdx], randomized[randomIdx]] = [
+                randomized[randomIdx],
+                randomized[currentIdx],
+            ]
+        }
+
+        return randomized
+    }
+
+    const calculateNextTurn = (): number => {
+        if (state.turn + 1 >= state.activePlayers.length) {
+            return 0
+        }
+
+        return state.turn + 1
+    }
+
     const setupGame = async (
         letters: string,
         players: Player[]
     ): Promise<void> => {
-        dispatch({ type: 'SETUP_GAME', payload: { letters, players } })
+        if (!letters) {
+            throw new Error("'letters' must contain a value.")
+        }
+
+        if (players.length < 2) {
+            throw new Error('At least 2 players required.')
+        }
+
+        const randomizedPlayers = randomizeArrayOrder(players)
+        const setter = randomizedPlayers[0]
+
+        console.log(`Letters: ${letters}`)
+        console.log(
+            `Added ${players.length} players: ${JSON.stringify(players.map(player => player.name))}`
+        )
+        console.log(`Starting game...`)
+
+        try {
+            const { id } = await init(letters.toUpperCase(), randomizedPlayers)
+
+            setState({
+                ...state,
+                id,
+                letters,
+                players: randomizedPlayers,
+                activePlayers: randomizedPlayers,
+                setterId: setter.id,
+            })
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const onTrickSetSuccess = async (trick: string): Promise<void> => {
-        dispatch({ type: 'TRICK_SET_SUCCESS', payload: { trick } })
+        if (!trick) {
+            throw new Error("'trick' must contain a value.")
+        }
+
+        const nextTurn = calculateNextTurn()
+
+        console.log(`${currentPlayer.name} has set the trick to ${trick}.`)
+
+        await update({
+            playerId: currentPlayer.id,
+            type: 'set',
+            status: 'success',
+            trick,
+            nextTurn,
+        })
+
+        setState({
+            ...state,
+            currentTrick: trick,
+            turn: nextTurn,
+        })
     }
 
     const onTrickSetFailure = async (): Promise<void> => {
-        dispatch({ type: 'TRICK_SET_FAILURE' })
+        const nextTurn = calculateNextTurn()
+        const setter = state.activePlayers[nextTurn]
+
+        console.log(`${currentPlayer.name} failed to set the trick.`)
+
+        await update({
+            playerId: currentPlayer.id,
+            type: 'set',
+            status: 'failed',
+            nextTurn,
+        })
+
+        setState({ ...state, setterId: setter.id, turn: nextTurn })
     }
 
     const onTrickCopySuccess = async (): Promise<void> => {
-        dispatch({ type: 'TRICK_COPY_SUCCESS' })
+        const { activePlayers, setterId, currentTrick } = state
+        const nextTurn = calculateNextTurn()
+        const nextPlayer = activePlayers[nextTurn]
+        const isRoundOver = nextPlayer.id === setterId
+
+        console.log(`${currentPlayer.name} has copied the ${currentTrick}.`)
+
+        await update({
+            playerId: currentPlayer.id,
+            type: 'copy',
+            status: 'success',
+            nextTurn,
+            roundOver: isRoundOver,
+        })
+
+        setState({
+            ...state,
+            currentTrick: isRoundOver ? null : currentTrick,
+            turn: nextTurn,
+        })
     }
 
     const onTrickCopyFailure = async (): Promise<void> => {
-        dispatch({ type: 'TRICK_COPY_FAILURE' })
-    }
+        const { players, turn, letters, currentTrick, setterId } = state
 
-    const reset = async (): Promise<void> => {
-        dispatch({ type: 'RESET' })
+        const points = currentPlayer.points + 1
+
+        const shouldEliminate = points === letters.length
+
+        const updatedPlayers = players.map(player => {
+            if (player.id === currentPlayer.id) {
+                return {
+                    ...currentPlayer,
+                    points,
+                    isEliminated: shouldEliminate ? true : false,
+                }
+            }
+
+            return player
+        })
+
+        const updatedActivePlayers = updatedPlayers.filter(
+            player => !player.isEliminated
+        )
+
+        let nextTurn = 0
+        if (shouldEliminate && turn < updatedActivePlayers.length) {
+            nextTurn = turn
+        } else if (!shouldEliminate && turn + 1 < updatedActivePlayers.length) {
+            nextTurn = turn + 1
+        } else {
+            nextTurn = 0
+        }
+
+        const isGameOver = updatedActivePlayers.length === 1
+        const winner = isGameOver ? updatedActivePlayers[0] : null
+
+        const isRoundOver = updatedActivePlayers[nextTurn].id === setterId
+
+        console.log(
+            `${currentPlayer.name} has failed to copy the ${currentTrick}.`
+        )
+        console.log(`${currentPlayer.name}: ${letters.slice(0, points)}`)
+
+        if (shouldEliminate) {
+            console.log(`${currentPlayer.name} has been eliminated.`)
+        }
+
+        if (winner) {
+            console.log(`The winner is ${winner.name}.`)
+        }
+
+        await update({
+            playerId: currentPlayer.id,
+            playerEliminated: shouldEliminate,
+            type: 'copy',
+            status: 'failed',
+            nextTurn,
+            players: updatedPlayers,
+            activePlayers: updatedActivePlayers,
+            winnerId: winner?.id,
+            roundOver: isRoundOver,
+        })
+
+        setState({
+            ...state,
+            players: updatedPlayers,
+            activePlayers: updatedActivePlayers,
+            winnerId: winner?.id ?? null,
+            currentTrick: isRoundOver ? null : currentTrick,
+            turn: nextTurn,
+        })
     }
 
     useEffect(() => {
@@ -88,20 +254,17 @@ export const GameProvider: React.FC<GameProviderProps> = ({
                 const gameData = record.data
                 const currentRound = gameData.rounds[gameData.rounds.length - 1]
 
-                dispatch({
-                    type: 'LOAD_GAME',
-                    payload: {
-                        id: record.id,
-                        letters: gameData.letters ?? '',
-                        players: gameData.players,
-                        activePlayers: gameData.players.filter(
-                            player => !player.isEliminated
-                        ),
-                        turn: gameData.turn,
-                        currentTrick: currentRound.trick ?? null,
-                        setterId: currentRound.setterId ?? null,
-                        winnerId: null,
-                    },
+                setState({
+                    id: record.id,
+                    letters: gameData.letters ?? '',
+                    players: gameData.players,
+                    activePlayers: gameData.players.filter(
+                        player => !player.isEliminated
+                    ),
+                    turn: gameData.turn,
+                    currentTrick: currentRound.trick ?? null,
+                    setterId: currentRound.setterId ?? null,
+                    winnerId: null,
                 })
                 setRecordStatus('succeeded')
             }
@@ -133,7 +296,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({
                 onTrickSetFailure,
                 onTrickCopySuccess,
                 onTrickCopyFailure,
-                reset,
             }}
         >
             {children}
