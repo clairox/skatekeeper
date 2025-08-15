@@ -7,6 +7,7 @@ import {
 import { ShantellSans_600SemiBold } from '@expo-google-fonts/shantell-sans'
 import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
+import { PortalProvider } from '@gorhom/portal'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -28,9 +29,11 @@ const RootLayout = () => {
     }
 
     return (
-        <MultiPlatformSafeAreaView>
-            <Slot />
-        </MultiPlatformSafeAreaView>
+        <PortalProvider>
+            <MultiPlatformSafeAreaView>
+                <Slot />
+            </MultiPlatformSafeAreaView>
+        </PortalProvider>
     )
 }
 
