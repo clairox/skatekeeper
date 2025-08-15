@@ -1,43 +1,42 @@
-import { useState } from 'react'
-import { Button, Modal, Pressable, View } from 'react-native'
 import Text from './Text'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from './DropdownMenu'
+import { DotsThreeOutlineVerticalIcon } from 'phosphor-react-native'
 
 type OverflowMenuProps = {
     options: { title: string; onPress: () => void }[]
 }
 
 const OverflowMenu: React.FC<OverflowMenuProps> = ({ options }) => {
-    const [visible, setVisible] = useState(false)
-
-    const toggleMenu = () => {
-        setVisible(prev => !prev)
-    }
     return (
-        <>
-            <Button title="Menu" onPress={toggleMenu} />
-            <Modal onRequestClose={() => setVisible(false)} visible={visible}>
-                <View style={{ paddingTop: 10 }}>
-                    {options.map((option, idx) => {
-                        return (
-                            <Pressable
-                                onPress={() => {
-                                    option.onPress()
-                                    setVisible(false)
-                                }}
-                                key={idx + option.title}
-                                style={{
-                                    justifyContent: 'center',
-                                    paddingLeft: 20,
-                                    height: 40,
-                                }}
-                            >
-                                <Text>{option.title}</Text>
-                            </Pressable>
-                        )
-                    })}
-                </View>
-            </Modal>
-        </>
+        <DropdownMenu>
+            <DropdownMenuTrigger>
+                <DotsThreeOutlineVerticalIcon size={20} weight="fill" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                {options.map((option, idx) => {
+                    return (
+                        <DropdownMenuItem
+                            onPress={() => {
+                                option.onPress()
+                            }}
+                            key={idx + option.title}
+                            style={{
+                                justifyContent: 'center',
+                                paddingLeft: 20,
+                                height: 40,
+                            }}
+                        >
+                            <Text>{option.title}</Text>
+                        </DropdownMenuItem>
+                    )
+                })}
+            </DropdownMenuContent>
+        </DropdownMenu>
     )
 }
 
