@@ -39,27 +39,27 @@ const HistoryPage = () => {
         fetchRecords()
     }, [])
 
-    if (records.length > 0) {
-        return (
-            <View style={styles.container}>
-                <OverflowMenu
-                    options={[
-                        {
-                            title: hideIncomplete
-                                ? 'Show incomplete'
-                                : 'Hide incomplete',
-                            onPress: toggleHideIncomplete,
-                        },
-                        {
-                            title: 'Delete all incomplete',
-                            onPress: deleteIncompleteRecords,
-                        },
-                        {
-                            title: 'Clear history',
-                            onPress: clearHistory,
-                        },
-                    ]}
-                />
+    return (
+        <View style={styles.container}>
+            <OverflowMenu
+                options={[
+                    {
+                        title: hideIncomplete
+                            ? 'Show incomplete'
+                            : 'Hide incomplete',
+                        onPress: toggleHideIncomplete,
+                    },
+                    {
+                        title: 'Delete all incomplete',
+                        onPress: deleteIncompleteRecords,
+                    },
+                    {
+                        title: 'Clear history',
+                        onPress: clearHistory,
+                    },
+                ]}
+            />
+            {records.length > 0 ? (
                 <FlatList
                     data={filteredRecords.map(record => {
                         const dateTimeString = formatDate(
@@ -85,27 +85,9 @@ const HistoryPage = () => {
                     contentContainerStyle={styles.listContent}
                     style={styles.list}
                 />
-            </View>
-        )
-    }
-
-    return (
-        <View style={styles.container}>
-            <OverflowMenu
-                options={[
-                    {
-                        title: hideIncomplete
-                            ? 'Show Incomplete'
-                            : 'Hide Incomplete',
-                        onPress: toggleHideIncomplete,
-                    },
-                    {
-                        title: 'Clear History',
-                        onPress: clearHistory,
-                    },
-                ]}
-            />
-            <Text>Nothing here</Text>
+            ) : (
+                <Text>Nothing here</Text>
+            )}
         </View>
     )
 }
