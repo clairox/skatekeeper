@@ -8,6 +8,8 @@
 
 ### In Progress
 
+- [ ] Overhaul overflow menu
+
 ### Done
 
 - [x] Migrate game state management to Zustand
