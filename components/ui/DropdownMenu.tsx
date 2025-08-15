@@ -1,7 +1,6 @@
 import { Pressable, PressableProps } from 'react-native'
 import * as Menu from './Menu'
 import { createContext, useCallback, useContext, useState } from 'react'
-import Text from './Text'
 
 type DropdownMenuContextValue = {
     open: boolean
