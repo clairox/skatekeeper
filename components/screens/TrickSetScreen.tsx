@@ -4,8 +4,9 @@ import LetterProgress from '../ui/LetterProgress'
 import Text from '../ui/Text'
 import CompactView from '../ui/CompactView'
 import { StyleSheet, View } from 'react-native'
-import TextButton from '../ui/TextButton'
 import CloseableTextInput from '../ui/CloseableTextInput'
+import LandedButton from '../ui/LandedButton'
+import MissedButton from '../ui/MissedButton'
 
 const TrickSetView = () => {
     const {
@@ -38,10 +39,8 @@ const TrickSetView = () => {
                 />
             ) : (
                 <View style={styles.buttonRow}>
-                    <TextButton onPress={onTrickSetFailure}>Missed</TextButton>
-                    <TextButton onPress={() => setTrickLanded(true)}>
-                        Landed
-                    </TextButton>
+                    <MissedButton onPress={onTrickSetFailure} />
+                    <LandedButton onPress={() => setTrickLanded(true)} />
                 </View>
             )}
         </CompactView>
@@ -55,6 +54,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 40,
+        gap: 130,
+        marginTop: 30,
     },
 })

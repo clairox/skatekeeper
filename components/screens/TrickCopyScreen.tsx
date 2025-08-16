@@ -3,7 +3,8 @@ import { useGameContext } from '../../context/GameContext'
 import LetterProgress from '../ui/LetterProgress'
 import Text from '../ui/Text'
 import CompactView from '../ui/CompactView'
-import TextButton from '../ui/TextButton'
+import MissedButton from '../ui/MissedButton'
+import LandedButton from '../ui/LandedButton'
 
 const TrickCopyView = () => {
     const {
@@ -21,8 +22,8 @@ const TrickCopyView = () => {
                 totalPoints={currentPlayer.points}
             />
             <View style={styles.buttonRow}>
-                <TextButton onPress={onTrickCopyFailure}>Missed</TextButton>
-                <TextButton onPress={onTrickCopySuccess}>Landed</TextButton>
+                <MissedButton onPress={onTrickCopyFailure} />
+                <LandedButton onPress={onTrickCopySuccess} />
             </View>
         </CompactView>
     )
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 40,
+        gap: 130,
+        marginTop: 30,
     },
 })
