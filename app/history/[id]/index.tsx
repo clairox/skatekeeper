@@ -11,21 +11,27 @@ const HistoryEntryPage = () => {
     const { id } = useLocalSearchParams() as { id: string }
 
     const [record, setRecord] = useState<HistoryRecord | null>(null)
-    const continueGame = (): void => {
-        router.push({ pathname: '/game', params: { id } })
-    }
 
-    const deleteRecord = async (): Promise<void> => {
-        await history.deleteRecord(id)
-        router.replace('/history')
-    }
-
-    const menuOptions = record?.completed
-        ? [{ title: 'Delete', callback: deleteRecord }]
-        : [
-              { title: 'Continue game', callback: continueGame },
-              { title: 'Delete', callback: deleteRecord },
-          ]
+    const isCompleted = record?.completed !== undefined && !record.completed
+    const options = [
+        ...(!isCompleted
+            ? [
+                  {
+                      title: 'Continue game',
+                      callback: () => {
+                          router.push({ pathname: '/game', params: { id } })
+                      },
+                  },
+              ]
+            : []),
+        {
+            title: 'Delete',
+            callback: async () => {
+                await history.deleteRecord(id)
+                router.replace('/history')
+            },
+        },
+    ]
 
     useEffect(() => {
         const fetchRecord = async () => {
@@ -53,7 +59,7 @@ const HistoryEntryPage = () => {
     if (record) {
         return (
             <View>
-                <PageHeader options={menuOptions} />
+                <PageHeader options={options} />
                 <Text>
                     {formatDate(record.createdAt)}
                     {!record.completed && ' - Incomplete'}
