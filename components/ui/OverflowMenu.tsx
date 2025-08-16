@@ -5,7 +5,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from './DropdownMenu'
-import { DotsThreeOutlineVerticalIcon } from 'phosphor-react-native'
+import { DotsThreeVerticalIcon } from 'phosphor-react-native'
 
 type OverflowMenuProps = {
     options: { title: string; onPress: () => void }[]
@@ -15,7 +15,7 @@ const OverflowMenu: React.FC<OverflowMenuProps> = ({ options }) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger>
-                <DotsThreeOutlineVerticalIcon size={20} weight="fill" />
+                <DotsThreeVerticalIcon size={28} weight="bold" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 {options.map((option, idx) => {
@@ -25,13 +25,15 @@ const OverflowMenu: React.FC<OverflowMenuProps> = ({ options }) => {
                                 option.onPress()
                             }}
                             key={idx + option.title}
-                            style={{
-                                justifyContent: 'center',
-                                paddingLeft: 20,
-                                height: 40,
-                            }}
                         >
-                            <Text>{option.title}</Text>
+                            <Text
+                                style={{
+                                    fontFamily: 'SpaceGrotesk_400Regular',
+                                    fontSize: 16,
+                                }}
+                            >
+                                {option.title}
+                            </Text>
                         </DropdownMenuItem>
                     )
                 })}
