@@ -1,4 +1,4 @@
-import { CheckIcon } from 'phosphor-react-native'
+import { Check } from 'phosphor-react-native'
 import { Pressable, PressableProps } from 'react-native'
 
 type LandedButtonProps = PressableProps
@@ -6,7 +6,7 @@ type LandedButtonProps = PressableProps
 const LandedButton: React.FC<LandedButtonProps> = props => {
     return (
         <Pressable {...props} style={{}}>
-            <CheckIcon size={50} weight="bold" />
+            <Check size={50} weight="bold" />
         </Pressable>
     )
 }

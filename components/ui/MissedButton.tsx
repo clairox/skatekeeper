@@ -1,4 +1,4 @@
-import { XIcon } from 'phosphor-react-native'
+import { X } from 'phosphor-react-native'
 import { Pressable, PressableProps } from 'react-native'
 
 type MissedButtonProps = PressableProps
@@ -6,7 +6,7 @@ type MissedButtonProps = PressableProps
 const MissedButton: React.FC<MissedButtonProps> = props => {
     return (
         <Pressable {...props} style={{}}>
-            <XIcon size={50} weight="bold" />
+            <X size={50} weight="bold" />
         </Pressable>
     )
 }
