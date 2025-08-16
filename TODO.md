@@ -5,10 +5,9 @@
 - [ ] App settings
 - [ ] UI design
 - [ ] Redos
+- [ ] Overflow menu animations
 
 ### In Progress
-
-- [ ] Overhaul overflow menu
 
 ### Done
 
@@ -17,3 +16,4 @@
 - [x] Prevent user from going back in /game route
 - [x] Game refactor
 - [x] Game history
+- [x] Overhaul overflow menu
