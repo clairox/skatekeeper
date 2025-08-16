@@ -4,28 +4,34 @@ import history from '../../../lib/history'
 import { FlatList, View } from 'react-native'
 import Text from '../../../components/ui/Text'
 import { formatDate } from '../../../utils/helpers'
-import OverflowMenu from '../../../components/ui/OverflowMenu'
+import PageHeader from '../../../components/ui/PageHeader'
 
 const HistoryEntryPage = () => {
     const router = useRouter()
     const { id } = useLocalSearchParams() as { id: string }
 
     const [record, setRecord] = useState<HistoryRecord | null>(null)
-    const continueGame = (): void => {
-        router.push({ pathname: '/game', params: { id } })
-    }
 
-    const deleteRecord = async (): Promise<void> => {
-        await history.deleteRecord(id)
-        router.replace('/history')
-    }
-
-    const menuOptions = record?.completed
-        ? [{ title: 'Delete', onPress: deleteRecord }]
-        : [
-              { title: 'Continue game', onPress: continueGame },
-              { title: 'Delete', onPress: deleteRecord },
-          ]
+    const isCompleted = record?.completed !== undefined && !record.completed
+    const options = [
+        ...(!isCompleted
+            ? [
+                  {
+                      title: 'Continue game',
+                      callback: () => {
+                          router.push({ pathname: '/game', params: { id } })
+                      },
+                  },
+              ]
+            : []),
+        {
+            title: 'Delete',
+            callback: async () => {
+                await history.deleteRecord(id)
+                router.replace('/history')
+            },
+        },
+    ]
 
     useEffect(() => {
         const fetchRecord = async () => {
@@ -53,7 +59,7 @@ const HistoryEntryPage = () => {
     if (record) {
         return (
             <View>
-                <OverflowMenu options={menuOptions} />
+                <PageHeader options={options} />
                 <Text>
                     {formatDate(record.createdAt)}
                     {!record.completed && ' - Incomplete'}

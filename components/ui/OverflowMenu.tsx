@@ -1,43 +1,42 @@
-import { useState } from 'react'
-import { Button, Modal, Pressable, View } from 'react-native'
 import Text from './Text'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from './DropdownMenu'
+import { DotsThreeVerticalIcon } from 'phosphor-react-native'
 
 type OverflowMenuProps = {
-    options: { title: string; onPress: () => void }[]
+    options: Option[]
 }
 
 const OverflowMenu: React.FC<OverflowMenuProps> = ({ options }) => {
-    const [visible, setVisible] = useState(false)
-
-    const toggleMenu = () => {
-        setVisible(prev => !prev)
-    }
     return (
-        <>
-            <Button title="Menu" onPress={toggleMenu} />
-            <Modal onRequestClose={() => setVisible(false)} visible={visible}>
-                <View style={{ paddingTop: 10 }}>
-                    {options.map((option, idx) => {
-                        return (
-                            <Pressable
-                                onPress={() => {
-                                    option.onPress()
-                                    setVisible(false)
-                                }}
-                                key={idx + option.title}
+        <DropdownMenu>
+            <DropdownMenuTrigger>
+                <DotsThreeVerticalIcon size={28} weight="bold" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                {options.map((option, idx) => {
+                    return (
+                        <DropdownMenuItem
+                            onPress={option.callback}
+                            key={idx + option.title}
+                        >
+                            <Text
                                 style={{
-                                    justifyContent: 'center',
-                                    paddingLeft: 20,
-                                    height: 40,
+                                    fontFamily: 'SpaceGrotesk_400Regular',
+                                    fontSize: 16,
                                 }}
                             >
-                                <Text>{option.title}</Text>
-                            </Pressable>
-                        )
-                    })}
-                </View>
-            </Modal>
-        </>
+                                {option.title}
+                            </Text>
+                        </DropdownMenuItem>
+                    )
+                })}
+            </DropdownMenuContent>
+        </DropdownMenu>
     )
 }
 

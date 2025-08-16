@@ -79,3 +79,8 @@ type UpdateHistoryValues = {
     winnerId?: number
     roundOver?: boolean
 }
+
+type Option = {
+    title: string
+    callback: (...any: any[]) => void
+}

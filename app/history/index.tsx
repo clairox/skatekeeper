@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'expo-router'
 import Text from '../../components/ui/Text'
 import { formatDate } from '../../utils/helpers'
-import OverflowMenu from '../../components/ui/OverflowMenu'
+import PageHeader from '../../components/ui/PageHeader'
 
 const HistoryPage = () => {
     const [records, setRecords] = useState<HistoryRecord[]>([])
@@ -17,20 +17,6 @@ const HistoryPage = () => {
         return records
     }, [records, hideIncomplete])
 
-    const toggleHideIncomplete = (): void => {
-        setHideIncomplete(prev => !prev)
-    }
-
-    const deleteIncompleteRecords = async (): Promise<void> => {
-        await history.deleteIncompleteRecords()
-        fetchRecords()
-    }
-
-    const clearHistory = async (): Promise<void> => {
-        await history.clearHistory()
-        fetchRecords()
-    }
-
     const fetchRecords = async () => {
         setRecords(await history.getRecords())
     }
@@ -39,27 +25,33 @@ const HistoryPage = () => {
         fetchRecords()
     }, [])
 
-    if (records.length > 0) {
-        return (
-            <View style={styles.container}>
-                <OverflowMenu
-                    options={[
-                        {
-                            title: hideIncomplete
-                                ? 'Show incomplete'
-                                : 'Hide incomplete',
-                            onPress: toggleHideIncomplete,
-                        },
-                        {
-                            title: 'Delete all incomplete',
-                            onPress: deleteIncompleteRecords,
-                        },
-                        {
-                            title: 'Clear history',
-                            onPress: clearHistory,
-                        },
-                    ]}
-                />
+    const options = [
+        {
+            title: hideIncomplete ? 'Show incomplete' : 'Hide incomplete',
+            callback: () => {
+                setHideIncomplete(prevHideIncomplete => !prevHideIncomplete)
+            },
+        },
+        {
+            title: 'Delete all incomplete',
+            callback: async () => {
+                await history.deleteIncompleteRecords()
+                fetchRecords()
+            },
+        },
+        {
+            title: 'Clear history',
+            callback: async () => {
+                await history.clearHistory()
+                fetchRecords()
+            },
+        },
+    ]
+
+    return (
+        <View style={styles.container}>
+            <PageHeader options={options} />
+            {records.length > 0 ? (
                 <FlatList
                     data={filteredRecords.map(record => {
                         const dateTimeString = formatDate(
@@ -85,27 +77,9 @@ const HistoryPage = () => {
                     contentContainerStyle={styles.listContent}
                     style={styles.list}
                 />
-            </View>
-        )
-    }
-
-    return (
-        <View style={styles.container}>
-            <OverflowMenu
-                options={[
-                    {
-                        title: hideIncomplete
-                            ? 'Show Incomplete'
-                            : 'Hide Incomplete',
-                        onPress: toggleHideIncomplete,
-                    },
-                    {
-                        title: 'Clear History',
-                        onPress: clearHistory,
-                    },
-                ]}
-            />
-            <Text>Nothing here</Text>
+            ) : (
+                <Text>Nothing here</Text>
+            )}
         </View>
     )
 }
