@@ -8,7 +8,7 @@ import {
 import { DotsThreeVerticalIcon } from 'phosphor-react-native'
 
 type OverflowMenuProps = {
-    options: { title: string; onPress: () => void }[]
+    options: Option[]
 }
 
 const OverflowMenu: React.FC<OverflowMenuProps> = ({ options }) => {
@@ -21,9 +21,7 @@ const OverflowMenu: React.FC<OverflowMenuProps> = ({ options }) => {
                 {options.map((option, idx) => {
                     return (
                         <DropdownMenuItem
-                            onPress={() => {
-                                option.onPress()
-                            }}
+                            onPress={option.callback}
                             key={idx + option.title}
                         >
                             <Text

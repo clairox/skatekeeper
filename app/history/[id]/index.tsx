@@ -4,7 +4,7 @@ import history from '../../../lib/history'
 import { FlatList, View } from 'react-native'
 import Text from '../../../components/ui/Text'
 import { formatDate } from '../../../utils/helpers'
-import OverflowMenu from '../../../components/ui/OverflowMenu'
+import PageHeader from '../../../components/ui/PageHeader'
 
 const HistoryEntryPage = () => {
     const router = useRouter()
@@ -21,10 +21,10 @@ const HistoryEntryPage = () => {
     }
 
     const menuOptions = record?.completed
-        ? [{ title: 'Delete', onPress: deleteRecord }]
+        ? [{ title: 'Delete', callback: deleteRecord }]
         : [
-              { title: 'Continue game', onPress: continueGame },
-              { title: 'Delete', onPress: deleteRecord },
+              { title: 'Continue game', callback: continueGame },
+              { title: 'Delete', callback: deleteRecord },
           ]
 
     useEffect(() => {
@@ -53,7 +53,7 @@ const HistoryEntryPage = () => {
     if (record) {
         return (
             <View>
-                <OverflowMenu options={menuOptions} />
+                <PageHeader options={menuOptions} />
                 <Text>
                     {formatDate(record.createdAt)}
                     {!record.completed && ' - Incomplete'}
