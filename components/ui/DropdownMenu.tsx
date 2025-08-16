@@ -1,11 +1,28 @@
-import { Pressable, PressableProps } from 'react-native'
-import * as Menu from './Menu'
-import { createContext, useCallback, useContext, useState } from 'react'
+import { PortalHost, PortalProvider } from '@gorhom/portal'
+import {
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useId,
+    useRef,
+    useState,
+} from 'react'
+import {
+    GestureResponderEvent,
+    Modal,
+    Pressable,
+    PressableProps,
+    View,
+} from 'react-native'
 
 type DropdownMenuContextValue = {
+    triggerId: string
+    triggerRef: React.RefObject<React.ComponentRef<typeof Pressable> | null>
     open: boolean
     onOpenChange: (open: boolean) => void
     onOpenToggle: () => void
+    onClose: () => void
 }
 
 const DropdownMenuContext = createContext<DropdownMenuContextValue>(
@@ -26,132 +43,219 @@ const DropdownMenuProvider: React.FC<DropdownMenuProviderProps> = ({
     )
 }
 
-const useDropdownMenu = () => {
+const useDropdownMenuContext = (consumerName: string) => {
     const ctx = useContext(DropdownMenuContext)
 
     if (!ctx) {
         throw new Error(
-            'Cannot use useDropdownMenu outside of DropdownMenuContext.'
+            `${consumerName} must be used within DropdownMenuContext`
         )
     }
 
     return ctx
 }
 
-type DropdownMenuProps = React.PropsWithChildren<{
-    open?: boolean
-    defaultOpen?: boolean
-    onOpenChange?: (open: boolean) => void
-}>
+type DropdownMenuProps = React.PropsWithChildren
 
-const DropdownMenu: React.FC<DropdownMenuProps> = ({
-    open: openProp,
-    defaultOpen,
-    onOpenChange,
-    children,
-}) => {
-    const [open, setOpen] = useState(defaultOpen ?? false)
+const DropdownMenu: React.FC<DropdownMenuProps> = ({ children }) => {
+    const triggerRef = useRef<React.ComponentRef<typeof Pressable>>(null)
 
-    const _setOpen = useCallback(
-        (nextValue: boolean | ((prev: boolean) => boolean)) => {
-            if (openProp != null) {
-                const value =
-                    typeof nextValue === 'function'
-                        ? nextValue(openProp)
-                        : nextValue
-
-                if (value !== openProp) {
-                    onOpenChange?.(value)
-                }
-            } else {
-                setOpen(nextValue)
-            }
-        },
-        [openProp, onOpenChange]
-    )
+    const [open, setOpen] = useState(false)
 
     return (
         <DropdownMenuProvider
+            triggerId={useId()}
+            triggerRef={triggerRef}
             open={open}
-            onOpenChange={_setOpen}
+            onOpenChange={setOpen}
             onOpenToggle={useCallback(
-                () => _setOpen(prev => !prev),
-                [_setOpen]
+                () => setOpen(prevOpen => !prevOpen),
+                [setOpen]
             )}
+            onClose={useCallback(() => setOpen(false), [setOpen])}
         >
-            <Menu.Root open={open} onOpenChange={_setOpen}>
-                {children}
-            </Menu.Root>
+            {children}
         </DropdownMenuProvider>
     )
 }
 
+const TRIGGER_NAME = 'DropdownMenuTrigger'
+
 type DropdownMenuTriggerProps = PressableProps
 
 const DropdownMenuTrigger: React.FC<DropdownMenuTriggerProps> = ({
-    disabled,
-    children,
+    disabled = false,
     ...triggerProps
 }) => {
-    const dropdownMenu = useDropdownMenu()
+    const context = useDropdownMenuContext(TRIGGER_NAME)
 
     return (
         <Pressable
-            onPress={event => {
-                triggerProps.onPress?.(event)
-
-                if (!event.defaultPrevented && !disabled) {
-                    dropdownMenu.onOpenToggle()
-                }
+            id={context.triggerId}
+            disabled={disabled}
+            {...triggerProps}
+            ref={context.triggerRef}
+            onPress={() => {
+                if (!disabled) context.onOpenToggle()
             }}
-        >
-            {children}
-        </Pressable>
+            style={{ width: 30, height: 30 }}
+        />
     )
 }
 
-type MenuContentProps = React.ComponentProps<typeof Menu.Content>
-type DropdownMenuContentProps = MenuContentProps
+const PORTAL_NAME = 'DropdownMenuPortal'
+
+type DropdownMenuPortalProps = React.PropsWithChildren
+
+const DropdownMenuPortal: React.FC<DropdownMenuPortalProps> = ({
+    children,
+}) => {
+    const context = useDropdownMenuContext(PORTAL_NAME)
+
+    return (
+        <PortalProvider>
+            {context.open && children}
+            <PortalHost name="DropdownMenuPortalHost" />
+        </PortalProvider>
+    )
+}
+
+type Measure = {
+    x: number
+    y: number
+    width: number
+    height: number
+}
+
+const CONTENT_NAME = 'DropdownMenuContent'
+
+type DropdownMenuContentProps = React.PropsWithChildren
 
 const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
     children,
 }) => {
-    useDropdownMenu()
+    const context = useDropdownMenuContext(CONTENT_NAME)
+    const contentRef = useRef<React.ComponentRef<typeof Pressable>>(null)
+    const [triggerMeasure, setTriggerMeasure] = useState<Measure | null>(null)
+    const [contentMeasure, setContentMeasure] = useState<Measure | null>(null)
 
-    return <Menu.Content>{children}</Menu.Content>
+    useEffect(() => {
+        const trigger = context.triggerRef.current
+        if (!triggerMeasure && trigger) {
+            trigger.measure((_x, _y, width, height, pageX, pageY) => {
+                setTriggerMeasure({
+                    x: pageX,
+                    y: pageY,
+                    width,
+                    height,
+                })
+            })
+        }
+    })
+
+    useEffect(() => {
+        const content = contentRef.current
+        if (!contentMeasure && content) {
+            content.measure((_x, _y, width, height, pageX, pageY) => {
+                setContentMeasure({
+                    x: pageX,
+                    y: pageY,
+                    width,
+                    height,
+                })
+            })
+        }
+    })
+
+    return (
+        <DropdownMenuPortal>
+            <Modal transparent={true} visible={context.open}>
+                <Pressable
+                    style={{ flex: 1 }}
+                    onPress={() => context.onOpenChange(false)}
+                >
+                    <Pressable
+                        ref={contentRef}
+                        style={[
+                            {
+                                position: 'absolute',
+                                borderRadius: 6,
+                                backgroundColor: '#fff',
+                                overflow: 'hidden',
+                                boxShadow: [
+                                    {
+                                        offsetX: -1,
+                                        offsetY: 1,
+                                        blurRadius: 10,
+                                        color: 'rgba(0,0,0,0.1)',
+                                    },
+                                ],
+                            },
+                            triggerMeasure &&
+                                contentMeasure && {
+                                    left:
+                                        triggerMeasure.x -
+                                        contentMeasure.width +
+                                        triggerMeasure.width,
+                                    top:
+                                        triggerMeasure.y -
+                                        triggerMeasure.height,
+                                },
+                        ]}
+                    >
+                        {children}
+                    </Pressable>
+                </Pressable>
+            </Modal>
+        </DropdownMenuPortal>
+    )
 }
 
-type MenuItemProps = React.ComponentProps<typeof Menu.Item>
-type DropdownMenuItemProps = MenuItemProps
+const ITEM_NAME = 'DropdownMenuItem'
+
+type DropdownMenuItemProps = React.PropsWithChildren<
+    PressableProps & {
+        onSelect?: (event: GestureResponderEvent) => void
+    }
+>
 
 const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
-    disabled = false,
-    ...itemProps
+    onSelect,
+    ...props
 }) => {
-    useDropdownMenu()
+    const context = useDropdownMenuContext(ITEM_NAME)
 
-    return <Menu.Item {...itemProps} />
+    return (
+        <Pressable
+            {...props}
+            style={({ pressed }) => [
+                {
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    paddingLeft: 18,
+                    paddingRight: 48,
+                    paddingVertical: 10,
+                    backgroundColor: '#fff',
+                },
+                pressed && {
+                    backgroundColor: '#eee',
+                },
+            ]}
+            onPress={event => {
+                props.onPress?.(event)
+
+                if (!event.defaultPrevented) {
+                    onSelect?.(event)
+                    context.onClose()
+                }
+            }}
+        />
+    )
 }
-
-const Root = DropdownMenu
-const Content = DropdownMenuContent
-const Trigger = DropdownMenuTrigger
-const Item = DropdownMenuItem
 
 export {
     DropdownMenu,
-    DropdownMenuContent,
     DropdownMenuTrigger,
+    DropdownMenuContent,
     DropdownMenuItem,
-    Root,
-    Content,
-    Trigger,
-    Item,
-}
-
-export type {
-    DropdownMenuProps,
-    DropdownMenuContentProps,
-    DropdownMenuTriggerProps,
-    DropdownMenuItemProps,
 }
