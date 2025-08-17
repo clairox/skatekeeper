@@ -2,7 +2,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { View, StyleSheet, FlatList, Button } from 'react-native'
 import history from '../../../lib/history'
-import Text from '../../../components/ui/Text'
+import Text from '../../../components/ui/primitives/Text'
 import LetterProgress from '../../../components/ui/LetterProgress'
 
 const HistoryEntryRecapPage = () => {

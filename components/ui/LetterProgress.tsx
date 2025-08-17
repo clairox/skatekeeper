@@ -1,5 +1,5 @@
 import { StyleProp, StyleSheet, TextStyle, View } from 'react-native'
-import Text from './Text'
+import Text from './primitives/Text'
 import { useTheme } from '../../context/ThemeContext'
 
 type LetterProgressProps = {

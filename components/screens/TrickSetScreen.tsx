@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useGameContext } from '../../context/GameContext'
 import LetterProgress from '../ui/LetterProgress'
-import Text from '../ui/Text'
+import Text from '../ui/primitives/Text'
 import CompactView from '../ui/CompactView'
 import { StyleSheet, View } from 'react-native'
 import CloseableTextInput from '../ui/CloseableTextInput'

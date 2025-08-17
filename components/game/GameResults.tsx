@@ -1,5 +1,5 @@
 import CompactView from '../ui/CompactView'
-import Text from '../ui/Text'
+import Text from '../ui/primitives/Text'
 import LetterProgress from '../ui/LetterProgress'
 import { View } from 'react-native'
 import TextButton from '../ui/TextButton'

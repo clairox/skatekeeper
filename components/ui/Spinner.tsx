@@ -1,4 +1,4 @@
-import Text from './Text'
+import Text from './primitives/Text'
 
 const Spinner = () => {
     return <Text>Loading...</Text>

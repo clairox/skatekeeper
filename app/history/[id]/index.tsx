@@ -2,7 +2,7 @@ import { Link, useLocalSearchParams, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
 import history from '../../../lib/history'
 import { FlatList, View } from 'react-native'
-import Text from '../../../components/ui/Text'
+import Text from '../../../components/ui/primitives/Text'
 import { formatDate } from '../../../utils/helpers'
 import PageHeader from '../../../components/ui/PageHeader'
 

@@ -2,7 +2,7 @@ import { FlatList, StyleSheet, View } from 'react-native'
 import history from '../../lib/history'
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'expo-router'
-import Text from '../../components/ui/Text'
+import Text from '../../components/ui/primitives/Text'
 import { formatDate } from '../../utils/helpers'
 import PageHeader from '../../components/ui/PageHeader'
 

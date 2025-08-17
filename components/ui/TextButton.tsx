@@ -1,5 +1,5 @@
 import { Pressable, PressableProps, StyleSheet, TextProps } from 'react-native'
-import Text from './Text'
+import Text from './primitives/Text'
 import { useTheme } from '../../context/ThemeContext'
 
 type TextButtonProps = PressableProps & Pick<TextProps, 'children'>

@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import Text from '../ui/Text'
+import Text from '../ui/primitives/Text'
 import CompactView from '../ui/CompactView'
 import PlayerInput from '../ui/PlayerInput'
 import TextButton from '../ui/TextButton'
