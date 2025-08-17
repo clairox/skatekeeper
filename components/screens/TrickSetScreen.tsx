@@ -18,12 +18,13 @@ const TrickSetView = () => {
     const [trickLanded, setTrickLanded] = useState(false)
 
     return (
-        <CompactView>
+        <CompactView style={{ paddingHorizontal: 30 }}>
             <Text>{currentPlayer.name} sets the trick!</Text>
             <LetterProgress
                 letters={letters}
                 totalPoints={currentPlayer.points}
             />
+
             {trickLanded ? (
                 <CloseableTextInput
                     onSubmitEditing={event => {

@@ -16,9 +16,9 @@ const PlayersSetup: React.FC<PlayersSetupProps> = ({
     done,
 }) => {
     return (
-        <CompactView>
+        <CompactView style={{ paddingHorizontal: 30, width: '100%' }}>
             <Text>{"Who's playing?"}</Text>
-            <View style={{ gap: 10, paddingHorizontal: 30, width: '100%' }}>
+            <View style={{ gap: 10 }}>
                 {players.map((player, idx) => (
                     <View
                         key={`${idx}-${player.name}`}
