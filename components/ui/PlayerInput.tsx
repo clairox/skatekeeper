@@ -29,6 +29,7 @@ const PlayerInput: React.FC<PlayerInputProps> = ({
         <View
             style={{
                 flexDirection: 'row',
+                gap: 5,
                 width: '100%',
             }}
         >
@@ -37,16 +38,14 @@ const PlayerInput: React.FC<PlayerInputProps> = ({
                 onChangeText={setValue}
                 placeholder={placeholder}
                 onSubmitEditing={handleSubmit}
-                style={{
-                    flex: 0.8,
-                }}
+                style={{}}
             />
             <Pressable
                 onPress={handleSubmit}
                 style={{
-                    flex: 0.2,
                     justifyContent: 'center',
                     alignItems: 'center',
+                    width: 40,
                     height: 40,
                 }}
             >

@@ -1,12 +1,13 @@
 import {
     BackHandler,
+    Pressable,
     StyleSheet,
-    TextInput,
     TextInputProps,
     View,
 } from 'react-native'
-import TextButton from './TextButton'
 import { useEffect } from 'react'
+import TextInput from './primitives/TextInput'
+import { X } from 'phosphor-react-native'
 
 type CloseableTextInputProps = TextInputProps & {
     onClose: () => void
@@ -31,9 +32,25 @@ const CloseableTextInput: React.FC<CloseableTextInputProps> = ({
     }, [onClose])
 
     return (
-        <View style={[styles.container, style]}>
-            <TextInput style={styles.textInput} {...props} />
-            <TextButton onPress={onClose}>x</TextButton>
+        <View
+            style={{
+                flexDirection: 'row',
+                gap: 5,
+                width: '100%',
+            }}
+        >
+            <TextInput {...props} style={{}} />
+            <Pressable
+                onPress={onClose}
+                style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: 40,
+                    height: 40,
+                }}
+            >
+                <X size={20} weight="bold" />
+            </Pressable>
         </View>
     )
 }
