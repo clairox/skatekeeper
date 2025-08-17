@@ -13,7 +13,6 @@ import {
     Modal,
     Pressable,
     PressableProps,
-    View,
 } from 'react-native'
 
 type DropdownMenuContextValue = {

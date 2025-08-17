@@ -1,5 +1,6 @@
 import { StyleProp, StyleSheet, TextStyle, View } from 'react-native'
 import Text from './Text'
+import { useTheme } from '../../context/ThemeContext'
 
 type LetterProgressProps = {
     letters: string
@@ -10,16 +11,27 @@ const LetterProgress: React.FC<LetterProgressProps> = ({
     letters,
     totalPoints,
 }) => {
+    const { theme } = useTheme()
+
+    const unearnedLetterColorStyle = {
+        color: theme === 'light' ? '#ccc' : '#222',
+    }
+    const earnedLetterColorStyle = {
+        color: theme === 'light' ? '#111' : '#ddd',
+    }
     return (
         <View style={styles.container}>
             {Array.from(letters).map((letter, idx) => {
-                const letterStyles: StyleProp<TextStyle> = [styles.letter]
-                if (totalPoints >= idx + 1) {
-                    letterStyles.push(styles.earnedLetter)
-                }
+                const colorStyle: StyleProp<TextStyle> =
+                    totalPoints >= idx + 1
+                        ? earnedLetterColorStyle
+                        : unearnedLetterColorStyle
 
                 return (
-                    <Text key={`${idx}-${letter}`} style={letterStyles}>
+                    <Text
+                        key={`${idx}-${letter}`}
+                        style={[styles.letter, colorStyle]}
+                    >
                         {letter}
                     </Text>
                 )
@@ -37,10 +49,6 @@ const styles = StyleSheet.create({
     letter: {
         fontFamily: 'ShantellSans_600SemiBold',
         fontSize: 40,
-        color: '#ccc',
         letterSpacing: 0,
-    },
-    earnedLetter: {
-        color: '#000',
     },
 })

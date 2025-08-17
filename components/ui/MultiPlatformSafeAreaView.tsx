@@ -1,21 +1,22 @@
 import {
+    Button,
     Platform,
     SafeAreaView,
     StatusBar,
     StyleSheet,
-    useColorScheme,
     View,
     ViewProps,
 } from 'react-native'
+import { useTheme } from '../../context/ThemeContext'
 
 const MultiPlatformSafeAreaView: React.FC<ViewProps> = ({
     style,
     ...props
 }) => {
-    const colorScheme = useColorScheme()
+    const { theme, toggleTheme } = useTheme()
 
     const themeContainerStyle =
-        colorScheme === 'light' ? styles.lightContainer : styles.darkContainer
+        theme === 'light' ? styles.lightContainer : styles.darkContainer
 
     if (Platform.OS === 'ios') {
         return <SafeAreaView {...props} style={themeContainerStyle} />
@@ -25,7 +26,10 @@ const MultiPlatformSafeAreaView: React.FC<ViewProps> = ({
         <View
             style={[styles.androidSafeArea, themeContainerStyle, style]}
             {...props}
-        />
+        >
+            <Button title="Switch Theme" onPress={toggleTheme} />
+            {props.children}
+        </View>
     )
 }
 
@@ -44,6 +48,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#ddd',
     },
     darkContainer: {
-        backgroundColor: '#000',
+        backgroundColor: '#111',
     },
 })

@@ -1,13 +1,14 @@
-import { Image, StyleSheet, useColorScheme, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import { useRouter } from 'expo-router'
 import TextButton from '../components/ui/TextButton'
+import { useTheme } from '../context/ThemeContext'
 
 const Home = () => {
     const router = useRouter()
 
-    const colorScheme = useColorScheme()
+    const { theme } = useTheme()
     const imageSource =
-        colorScheme === 'light'
+        theme === 'light'
             ? require('../assets/skatekeeper-logo-light.png')
             : require('../assets/skatekeeper-logo-dark.png')
 

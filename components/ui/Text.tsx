@@ -3,11 +3,14 @@ import {
     Text as RNText,
     TextProps as RNTextProps,
 } from 'react-native'
+import { useTheme } from '../../context/ThemeContext'
 
 type TextProps = RNTextProps
 
 const Text: React.FC<TextProps> = ({ style, ...props }) => {
-    return <RNText style={[styles.text, style]} {...props} />
+    const { theme } = useTheme()
+    const color = theme === 'light' ? '#111' : '#ddd'
+    return <RNText style={[styles.text, { color }, style]} {...props} />
 }
 
 export default Text

@@ -7,6 +7,7 @@ import {
 import { ShantellSans_600SemiBold } from '@expo-google-fonts/shantell-sans'
 import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
+import { ThemeProvider } from '../context/ThemeContext'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -28,9 +29,11 @@ const RootLayout = () => {
     }
 
     return (
-        <MultiPlatformSafeAreaView>
-            <Slot />
-        </MultiPlatformSafeAreaView>
+        <ThemeProvider>
+            <MultiPlatformSafeAreaView>
+                <Slot />
+            </MultiPlatformSafeAreaView>
+        </ThemeProvider>
     )
 }
 

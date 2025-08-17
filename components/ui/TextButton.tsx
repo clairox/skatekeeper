@@ -1,5 +1,6 @@
 import { Pressable, PressableProps, StyleSheet, TextProps } from 'react-native'
 import Text from './Text'
+import { useTheme } from '../../context/ThemeContext'
 
 type TextButtonProps = PressableProps & Pick<TextProps, 'children'>
 
@@ -8,12 +9,22 @@ const TextButton: React.FC<TextButtonProps> = ({
     disabled,
     ...props
 }) => {
-    const disabledStyle = { color: disabled ? '#bbb' : '#000' }
+    const { theme } = useTheme()
+
+    const style = {
+        ...styles.text,
+        color: disabled
+            ? theme === 'light'
+                ? '#bbb'
+                : '#333'
+            : theme === 'light'
+              ? '#111'
+              : '#ddd',
+    }
+
     return (
         <Pressable disabled={disabled} {...props}>
-            <Text style={[styles.menuButtonText, disabledStyle]}>
-                {children}
-            </Text>
+            <Text style={style}>{children}</Text>
         </Pressable>
     )
 }
@@ -21,7 +32,7 @@ const TextButton: React.FC<TextButtonProps> = ({
 export default TextButton
 
 const styles = StyleSheet.create({
-    menuButtonText: {
+    text: {
         fontSize: 28,
         textAlign: 'center',
     },
