@@ -1,5 +1,8 @@
 import { useState } from 'react'
-import { Pressable, Text, TextInput, View } from 'react-native'
+import { Pressable, View } from 'react-native'
+import TextInput from './primitives/TextInput'
+import { Plus } from 'phosphor-react-native'
+import { useTheme } from '../../context/ThemeContext'
 
 type PlayerInputProps = {
     onPlayerAdded: (name: string) => void
@@ -10,6 +13,8 @@ const PlayerInput: React.FC<PlayerInputProps> = ({
     onPlayerAdded,
     placeholder,
 }) => {
+    const { theme } = useTheme()
+
     const [value, setValue] = useState('')
 
     const handleSubmit = () => {
@@ -18,11 +23,12 @@ const PlayerInput: React.FC<PlayerInputProps> = ({
         setValue('')
     }
 
+    const iconColor = theme === 'light' ? '#111' : '#ddd'
+
     return (
         <View
             style={{
                 flexDirection: 'row',
-                gap: 10,
                 width: '100%',
             }}
         >
@@ -33,11 +39,6 @@ const PlayerInput: React.FC<PlayerInputProps> = ({
                 onSubmitEditing={handleSubmit}
                 style={{
                     flex: 0.8,
-                    padding: 0,
-                    height: 40,
-                    borderWidth: 1,
-                    borderColor: '#000000',
-                    fontFamily: 'SpaceGrotesk_400Regular',
                 }}
             />
             <Pressable
@@ -47,10 +48,9 @@ const PlayerInput: React.FC<PlayerInputProps> = ({
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: 40,
-                    backgroundColor: '#000',
                 }}
             >
-                <Text style={{ color: '#fff', fontSize: 20 }}>+</Text>
+                <Plus size={20} weight="bold" color={iconColor} />
             </Pressable>
         </View>
     )
